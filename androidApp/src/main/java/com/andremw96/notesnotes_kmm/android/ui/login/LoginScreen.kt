@@ -1,17 +1,16 @@
 package com.andremw96.notesnotes_kmm.android.ui.login
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,20 +22,22 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidation
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
 ) {
+    val state = viewModel.loginFormState.observeAsState(
+        initial = LoginFormState(
+            "",
+            "",
+            null,
+            null,
+        )
+    ).value
+
     val context = LocalContext.current
-
-    var email by remember {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
-    }
 
     Column(
         modifier = Modifier
@@ -56,11 +57,15 @@ fun LoginScreen(
                 .padding(bottom = 20.dp)
         )
 
-        OutlinedTextField(
-            value = email,
+        OutlinedTextFieldValidation(
+            value = state.email,
             onValueChange = {
-                email = it
+                viewModel.loginDataChanged(
+                    it,
+                    state.password
+                )
             },
+            error = state.emailError ?: "",
             singleLine = true,
             label = {
                 Text(text = "Enter your email")
@@ -74,11 +79,15 @@ fun LoginScreen(
                 .padding(bottom = 12.dp, top = 12.dp)
         )
 
-        OutlinedTextField(
-            value = password,
+        OutlinedTextFieldValidation(
+            value = state.password,
             onValueChange = {
-                password = it
+                viewModel.loginDataChanged(
+                    state.email,
+                    it
+                )
             },
+            error = state.passwordError ?: "",
             singleLine = true,
             label = {
                 Text(text = "Enter your password")
@@ -95,7 +104,7 @@ fun LoginScreen(
 
         OutlinedButton(
             onClick = {
-                val text = viewModel.login(email, password)
+                val text = viewModel.login(state.email, state.password)
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
             },
             modifier = Modifier

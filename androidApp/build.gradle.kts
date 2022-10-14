@@ -46,7 +46,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
     kapt("com.google.dagger:hilt-compiler:2.44")
-
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.0-rc01")
     // For instrumentation tests
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
     kaptAndroidTest("com.google.dagger:hilt-compiler:2.44")
