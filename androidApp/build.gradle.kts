@@ -34,12 +34,18 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+
+    val androidAppCompatVersion = rootProject.extra["androidAppCompatVersion"]
+    val androidMaterialVersion = rootProject.extra["androidMaterialVersion"]
     val activityComposeVersion = rootProject.extra["activityComposeVersion"]
     val androidComposeUiVersion = rootProject.extra["androidComposeUiVersion"]
     val multiDexVersion = rootProject.extra["multiDexVersion"]
     val androidComposeLiveDataVersion = rootProject.extra["androidComposeLiveDataVersion"]
     val koinVersion = rootProject.extra["koinVersion"]
+    val navVersion = rootProject.extra["androidComposeNavVersion"]
 
+    implementation("androidx.appcompat:appcompat:$androidAppCompatVersion")
+    implementation("com.google.android.material:material:$androidMaterialVersion")
     implementation("androidx.compose.ui:ui:$androidComposeUiVersion")
     implementation("androidx.compose.ui:ui-tooling:$androidComposeUiVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$androidComposeUiVersion")
@@ -47,11 +53,12 @@ dependencies {
     implementation("androidx.compose.material:material:$androidComposeUiVersion")
     implementation("androidx.activity:activity-compose:$activityComposeVersion")
     implementation("com.android.support:multidex:$multiDexVersion")
-
+    implementation("androidx.navigation:navigation-compose:$navVersion")
     // compose live data
     implementation("androidx.compose.runtime:runtime-livedata:$androidComposeLiveDataVersion")
 
     // koin
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation ("io.insert-koin:koin-androidx-compose:$koinVersion")
 }

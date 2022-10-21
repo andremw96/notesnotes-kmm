@@ -1,9 +1,11 @@
 package com.andremw96.notesnotes_kmm.android.ui.login
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -27,6 +29,7 @@ import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidati
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
+    onNavigateToNoteList: () -> Unit,
 ) {
     val state = viewModel.loginFormState.observeAsState(
         initial = LoginFormState(
@@ -42,6 +45,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colors.background)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
@@ -106,6 +110,7 @@ fun LoginScreen(
             onClick = {
                 val text = viewModel.login(state.email, state.password)
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                onNavigateToNoteList()
             },
             modifier = Modifier
                 .fillMaxWidth()
