@@ -43,6 +43,7 @@ dependencies {
     val androidComposeLiveDataVersion = rootProject.extra["androidComposeLiveDataVersion"]
     val koinVersion = rootProject.extra["koinVersion"]
     val navVersion = rootProject.extra["androidComposeNavVersion"]
+    val coroutineVersion = rootProject.extra["coroutineVersion"]
 
     implementation("androidx.appcompat:appcompat:$androidAppCompatVersion")
     implementation("com.google.android.material:material:$androidMaterialVersion")
@@ -61,4 +62,7 @@ dependencies {
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("io.insert-koin:koin-core:$koinVersion")
     implementation ("io.insert-koin:koin-androidx-compose:$koinVersion")
+
+    // coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
 }

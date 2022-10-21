@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
 }
 
 kotlin {
@@ -17,19 +18,28 @@ kotlin {
         }
     }
 
+
     sourceSets {
+        val koinVersion = rootProject.extra["koinVersion"]
+        val ktorVersion = rootProject.extra["ktorVersion"]
+        val coroutineVersion = rootProject.extra["coroutineVersion"]
+
         val commonMain by getting {
             dependencies {
-                val koinVersion = rootProject.extra["koinVersion"]
                 // Koin Core features
                 api("io.insert-koin:koin-core:$koinVersion")
                 api("io.insert-koin:koin-test:$koinVersion")
                 // Koin Test features
                 //testImplementation("io.insert-koin:koin-test:3.2.2")
-//                // Koin for Ktor
-//                implementation("io.insert-koin:koin-ktor:3.2.2")
-//                // SLF4J Logger
-//                implementation("io.insert-koin:koin-logger-slf4j:3.2.2")
+                // Koin for Ktor
+                implementation("io.insert-koin:koin-ktor:$koinVersion")
+                // Ktor
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
             }
         }
         val commonTest by getting {
@@ -37,7 +47,12 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-android:$ktorVersion")
+                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+            }
+        }
         val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -47,6 +62,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+            }
         }
         val iosX64Test by getting
         val iosArm64Test by getting

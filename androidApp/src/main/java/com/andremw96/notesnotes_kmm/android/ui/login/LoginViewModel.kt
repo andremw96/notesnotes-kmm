@@ -35,7 +35,7 @@ class LoginViewModel(
         )
     }
 
-    fun login(email: String, password: String): String {
+    suspend fun login(email: String, password: String): String {
         return if (_loginForm.value?.isDataValid == true) login.invoke(email, password) else ""
     }
 }

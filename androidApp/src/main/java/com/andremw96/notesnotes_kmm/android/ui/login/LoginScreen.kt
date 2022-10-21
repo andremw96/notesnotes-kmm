@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +25,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andremw96.notesnotes_kmm.android.BuildConfig
 import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidation
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -41,6 +45,7 @@ fun LoginScreen(
     ).value
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -108,9 +113,15 @@ fun LoginScreen(
 
         OutlinedButton(
             onClick = {
-                val text = viewModel.login(state.email, state.password)
-                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-                onNavigateToNoteList()
+                scope.launch {
+                    try {
+                        val text = viewModel.login(state.email, state.password)
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                        onNavigateToNoteList()
+                    } catch (e: Exception) {
+                        e.localizedMessage ?: "error"
+                    }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()

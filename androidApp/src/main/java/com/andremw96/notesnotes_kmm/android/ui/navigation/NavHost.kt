@@ -17,6 +17,7 @@ fun NotesNotesNavigation(
         composable(NavGraphConstant.login) {
             val loginViewModel: LoginViewModel = getViewModel()
             LoginScreen(viewModel = loginViewModel) {
+                navController.popBackStack(NavGraphConstant.login, true)
                 navController.navigate(NavGraphConstant.note_list)
             }
         }
