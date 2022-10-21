@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("kotlin-kapt")
 }
 
 kotlin {
@@ -17,7 +18,20 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                val koinVersion = rootProject.extra["koinVersion"]
+                // Koin Core features
+                api("io.insert-koin:koin-core:$koinVersion")
+                api("io.insert-koin:koin-test:$koinVersion")
+                // Koin Test features
+                //testImplementation("io.insert-koin:koin-test:3.2.2")
+//                // Koin for Ktor
+//                implementation("io.insert-koin:koin-ktor:3.2.2")
+//                // SLF4J Logger
+//                implementation("io.insert-koin:koin-logger-slf4j:3.2.2")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))

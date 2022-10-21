@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -35,23 +34,24 @@ android {
 
 dependencies {
     implementation(project(":shared"))
-    implementation("androidx.compose.ui:ui:1.2.1")
-    implementation("androidx.compose.ui:ui-tooling:1.2.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
-    implementation("androidx.compose.foundation:foundation:1.2.1")
-    implementation("androidx.compose.material:material:1.2.1")
-    implementation("androidx.activity:activity-compose:1.6.0")
-    implementation("com.android.support:multidex:1.0.3")
+    val activityComposeVersion = rootProject.extra["activityComposeVersion"]
+    val androidComposeUiVersion = rootProject.extra["androidComposeUiVersion"]
+    val multiDexVersion = rootProject.extra["multiDexVersion"]
+    val androidComposeLiveDataVersion = rootProject.extra["androidComposeLiveDataVersion"]
+    val koinVersion = rootProject.extra["koinVersion"]
 
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
-    kapt("com.google.dagger:hilt-compiler:2.44")
-    implementation("androidx.compose.runtime:runtime-livedata:1.3.0-rc01")
-    // For instrumentation tests
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.44")
+    implementation("androidx.compose.ui:ui:$androidComposeUiVersion")
+    implementation("androidx.compose.ui:ui-tooling:$androidComposeUiVersion")
+    implementation("androidx.compose.ui:ui-tooling-preview:$androidComposeUiVersion")
+    implementation("androidx.compose.foundation:foundation:$androidComposeUiVersion")
+    implementation("androidx.compose.material:material:$androidComposeUiVersion")
+    implementation("androidx.activity:activity-compose:$activityComposeVersion")
+    implementation("com.android.support:multidex:$multiDexVersion")
 
-    // For local unit tests
-    testImplementation("com.google.dagger:hilt-android-testing:2.44")
-    kaptTest("com.google.dagger:hilt-compiler:2.44")
+    // compose live data
+    implementation("androidx.compose.runtime:runtime-livedata:$androidComposeLiveDataVersion")
+
+    // koin
+    implementation("io.insert-koin:koin-android:$koinVersion")
+    implementation("io.insert-koin:koin-core:$koinVersion")
 }

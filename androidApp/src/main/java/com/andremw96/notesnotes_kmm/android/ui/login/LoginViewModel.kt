@@ -3,13 +3,10 @@ package com.andremw96.notesnotes_kmm.android.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andremw96.notesnotes_kmm.android.domain.Login
+import com.andremw96.notesnotes_kmm.domain.Login
 import com.andremw96.notesnotes_kmm.model.LoginDataValidator
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel(
     private val login: Login,
     private val loginDataValidator: LoginDataValidator,
 ) : ViewModel() {
