@@ -1,4 +1,4 @@
-package com.andremw96.notesnotes_kmm.model
+package com.andremw96.notesnotes_kmm.model.repository
 
 class LoginDataValidator {
 
@@ -18,8 +18,10 @@ class LoginDataValidator {
         class Error(val message: String) : LoginValidatorResult()
     }
 
-    fun checkEmail(email: String): LoginValidatorResult {
-        return if (isEmailValid(email)) LoginValidatorResult.Success else LoginValidatorResult.Error("Email is not valid")
+    fun checkUsername(username: String): LoginValidatorResult {
+        return if (isUsernameValid(username)) LoginValidatorResult.Success else LoginValidatorResult.Error(
+            "Username is not valid"
+        )
     }
 
     fun checkPassword(password: String): LoginValidatorResult {
@@ -30,5 +32,5 @@ class LoginDataValidator {
         }
     }
 
-    private fun isEmailValid(email: String) = emailRegex.matches(email)
+    private fun isUsernameValid(username: String) = username.isNotBlank() && username.isNotEmpty()
 }

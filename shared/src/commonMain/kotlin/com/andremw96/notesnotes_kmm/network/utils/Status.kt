@@ -1,4 +1,4 @@
-package com.andremw96.notesnotes_kmm.android.utils
+package com.andremw96.notesnotes_kmm.network.utils
 
 enum class Status {
     SUCCESS,

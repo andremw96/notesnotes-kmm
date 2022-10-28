@@ -20,7 +20,7 @@ fun ListNoteScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Noted",
+            text = "Noted LIST SCREEN",
             fontFamily = FontFamily.Monospace,
             fontSize = 40.sp,
             textAlign = TextAlign.Center,

@@ -2,8 +2,7 @@ package com.andremw96.notesnotes_kmm.di.module
 
 import com.andremw96.notesnotes_kmm.domain.Login
 import com.andremw96.notesnotes_kmm.domain.impl.LoginImpl
-import com.andremw96.notesnotes_kmm.model.LoginDataValidator
-import org.koin.core.module.dsl.singleOf
+import com.andremw96.notesnotes_kmm.model.repository.LoginDataValidator
 import org.koin.dsl.module
 
 val useCaseModule = module {

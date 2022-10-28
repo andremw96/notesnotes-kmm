@@ -1,19 +1,18 @@
 package com.andremw96.notesnotes_kmm.android.ui.login
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -25,9 +24,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.andremw96.notesnotes_kmm.android.BuildConfig
 import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidation
-import kotlinx.coroutines.coroutineScope
+import com.andremw96.notesnotes_kmm.android.ui.widget.DismissDialog
+import com.andremw96.notesnotes_kmm.network.utils.Resource
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,24 +35,51 @@ fun LoginScreen(
     onNavigateToNoteList: () -> Unit,
 ) {
     val state = viewModel.loginFormState.observeAsState(
-        initial = LoginFormState(
-            "",
-            "",
-            null,
-            null,
-        )
+        initial = Resource.Idle()
     ).value
 
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    val openDialog = remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        when (state) {
+            is Resource.Loading -> {
+                openDialog.value = false
+                CircularProgressIndicator()
+            }
+            is Resource.Success -> {
+                openDialog.value = false
+                onNavigateToNoteList()
+            }
+            is Resource.Error -> {
+                openDialog.value = true
+                viewModel.resetState()
+            }
+            else -> {
+                // do nothing
+            }
+        }
+
+        if (openDialog.value) {
+            DismissDialog(
+                onDismissClicked = {
+                    openDialog.value = false
+                },
+                title = "Something went wrong",
+                bodyMessage = state.message ?: "Something went wrong"
+            )
+        }
+
         Text(
             text = "Noted",
             fontFamily = FontFamily.Monospace,
@@ -67,20 +93,20 @@ fun LoginScreen(
         )
 
         OutlinedTextFieldValidation(
-            value = state.email,
+            value = state.data?.username ?: "",
             onValueChange = {
                 viewModel.loginDataChanged(
                     it,
-                    state.password
+                    state.data?.password ?: ""
                 )
             },
-            error = state.emailError ?: "",
+            error = state.data?.usernameError ?: "",
             singleLine = true,
             label = {
-                Text(text = "Enter your email")
+                Text(text = "Enter your username")
             },
             leadingIcon = {
-                Icon(Icons.Default.Person, contentDescription = "email")
+                Icon(Icons.Default.Person, contentDescription = "username")
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             modifier = Modifier
@@ -89,14 +115,14 @@ fun LoginScreen(
         )
 
         OutlinedTextFieldValidation(
-            value = state.password,
+            value = state.data?.password ?: "",
             onValueChange = {
                 viewModel.loginDataChanged(
-                    state.email,
+                    state.data?.username ?: "",
                     it
                 )
             },
-            error = state.passwordError ?: "",
+            error = state.data?.passwordError ?: "",
             singleLine = true,
             label = {
                 Text(text = "Enter your password")
@@ -115,9 +141,7 @@ fun LoginScreen(
             onClick = {
                 scope.launch {
                     try {
-                        val text = viewModel.login(state.email, state.password)
-                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-                        onNavigateToNoteList()
+                        viewModel.login(state.data?.username ?: "", state.data?.password ?: "")
                     } catch (e: Exception) {
                         e.localizedMessage ?: "error"
                     }
@@ -125,7 +149,8 @@ fun LoginScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 12.dp, top = 12.dp)
+                .padding(bottom = 12.dp, top = 12.dp),
+            enabled = state.data?.isDataValid ?: false
         ) {
             Text(text = "Login", textAlign = TextAlign.Center)
         }
