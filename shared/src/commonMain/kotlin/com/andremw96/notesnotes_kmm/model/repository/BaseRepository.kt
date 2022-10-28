@@ -24,7 +24,6 @@ abstract class BaseRepository {
                     val errorResponse: ErrorResponse? = convertErrorBody(response.body())
                     Resource.Error(errorResponse?.error ?: "Something went wrong")
                 }
-
             }  catch (e: IOException) {
                 Resource.Error("Please check your network connection ${e.message}")
             } catch (e: Exception) {

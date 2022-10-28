@@ -8,9 +8,11 @@ data class LoginFormState(
     val password: String = "",
     val usernameError: String? = null,
     val passwordError: String? = null,
+    val isLoading: Boolean = false,
     val email: String? = null,
     val accessToken: String? = null,
     val loginError: String? = null,
+    val isLoginSuccess: Boolean = false,
 ) {
     val isDataValid: Boolean
         get() = usernameError == null && passwordError == null

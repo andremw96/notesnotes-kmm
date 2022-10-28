@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.andremw96.notesnotes_kmm.android.ui.login
 
 import androidx.compose.foundation.background
@@ -7,15 +9,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidation
 import com.andremw96.notesnotes_kmm.android.ui.widget.DismissDialog
-import com.andremw96.notesnotes_kmm.network.utils.Resource
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,7 +34,7 @@ fun LoginScreen(
     onNavigateToNoteList: () -> Unit,
 ) {
     val state = viewModel.loginFormState.observeAsState(
-        initial = Resource.Idle()
+        initial = LoginFormState()
     ).value
 
     val scope = rememberCoroutineScope()
@@ -43,6 +42,8 @@ fun LoginScreen(
     val openDialog = remember {
         mutableStateOf(false)
     }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -52,21 +53,15 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when (state) {
-            is Resource.Loading -> {
-                openDialog.value = false
-                CircularProgressIndicator()
-            }
-            is Resource.Success -> {
-                openDialog.value = false
-                onNavigateToNoteList()
-            }
-            is Resource.Error -> {
-                openDialog.value = true
-                viewModel.resetState()
-            }
-            else -> {
-                // do nothing
+        LaunchedEffect(key1 = state) {
+            when {
+                state.isLoginSuccess -> {
+                    openDialog.value = false
+                    onNavigateToNoteList()
+                }
+                state.loginError != null -> {
+                    openDialog.value = true
+                }
             }
         }
 
@@ -76,7 +71,7 @@ fun LoginScreen(
                     openDialog.value = false
                 },
                 title = "Something went wrong",
-                bodyMessage = state.message ?: "Something went wrong"
+                bodyMessage = state.loginError ?: "Something went wrong"
             )
         }
 
@@ -93,14 +88,15 @@ fun LoginScreen(
         )
 
         OutlinedTextFieldValidation(
-            value = state.data?.username ?: "",
+            enabled = !state.isLoading,
+            value = state.username,
             onValueChange = {
                 viewModel.loginDataChanged(
                     it,
-                    state.data?.password ?: ""
+                    state.password
                 )
             },
-            error = state.data?.usernameError ?: "",
+            error = state.usernameError ?: "",
             singleLine = true,
             label = {
                 Text(text = "Enter your username")
@@ -115,14 +111,15 @@ fun LoginScreen(
         )
 
         OutlinedTextFieldValidation(
-            value = state.data?.password ?: "",
+            enabled = !state.isLoading,
+            value = state.password,
             onValueChange = {
                 viewModel.loginDataChanged(
-                    state.data?.username ?: "",
+                    state.username,
                     it
                 )
             },
-            error = state.data?.passwordError ?: "",
+            error = state.passwordError ?: "",
             singleLine = true,
             label = {
                 Text(text = "Enter your password")
@@ -139,9 +136,10 @@ fun LoginScreen(
 
         OutlinedButton(
             onClick = {
+                keyboardController?.hide()
                 scope.launch {
                     try {
-                        viewModel.login(state.data?.username ?: "", state.data?.password ?: "")
+                        viewModel.login(state.username, state.password)
                     } catch (e: Exception) {
                         e.localizedMessage ?: "error"
                     }
@@ -150,9 +148,18 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp, top = 12.dp),
-            enabled = state.data?.isDataValid ?: false
+            enabled = state.isDataValid
         ) {
-            Text(text = "Login", textAlign = TextAlign.Center)
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Login", textAlign = TextAlign.Center)
+
+                if (state.isLoading) {
+                    CircularProgressIndicator()
+                }
+            }
         }
     }
 }

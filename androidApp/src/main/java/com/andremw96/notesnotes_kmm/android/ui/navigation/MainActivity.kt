@@ -3,6 +3,7 @@ package com.andremw96.notesnotes_kmm.android.ui.navigation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.compose.rememberNavController
 import com.andremw96.notesnotes_kmm.android.theme.NotesNotesTheme
 
