@@ -31,8 +31,8 @@ kotlin {
                 api("io.insert-koin:koin-test:$koinVersion")
                 // Koin Test features
                 //testImplementation("io.insert-koin:koin-test:3.2.2")
-                // Koin for Ktor
-                implementation("io.insert-koin:koin-ktor:$koinVersion")
+//                // Koin for Ktor
+//                api("io.insert-koin:koin-ktor:$koinVersion")
                 // Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")

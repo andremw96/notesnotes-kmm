@@ -5,7 +5,7 @@ buildscript {
         set("activityComposeVersion", "1.6.0")
         set("androidComposeUiVersion", "1.2.1")
         set("androidComposeLiveDataVersion", "1.3.0-rc01")
-        set("multiDexVersion", "1.0.3")
+        set("multiDexVersion", "2.0.1")
         set("androidComposeNavVersion", "2.5.2")
 
         // koin

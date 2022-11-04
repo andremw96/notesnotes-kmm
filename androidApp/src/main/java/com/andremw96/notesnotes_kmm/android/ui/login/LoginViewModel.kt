@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andremw96.notesnotes_kmm.domain.GetCredential
 import com.andremw96.notesnotes_kmm.domain.Login
+import com.andremw96.notesnotes_kmm.domain.SaveCredential
 import com.andremw96.notesnotes_kmm.model.repository.LoginDataValidator
 import com.andremw96.notesnotes_kmm.network.utils.Resource
 import kotlinx.coroutines.launch
@@ -12,7 +14,13 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val login: Login,
     private val loginDataValidator: LoginDataValidator,
+    private val saveCredential: SaveCredential,
+    private val getCredential: GetCredential,
 ) : ViewModel() {
+
+    init {
+
+    }
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -66,6 +74,9 @@ class LoginViewModel(
                             isLoginSuccess = true
                         )
                     )
+                    login.data?.accessToken?.let {
+                        saveCredential.invoke(username, it)
+                    }
                 } else {
                     _loginForm.postValue(
                         LoginFormState(

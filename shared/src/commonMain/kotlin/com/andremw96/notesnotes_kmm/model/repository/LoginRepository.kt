@@ -5,4 +5,8 @@ import com.andremw96.notesnotes_kmm.network.utils.Resource
 
 interface LoginRepository {
     suspend fun login(username: String, password: String): Resource<LoginUserResponse>
+
+    fun saveCredential(token: String, username: String)
+
+    fun getCredential(): Pair<String?, String?>
 }

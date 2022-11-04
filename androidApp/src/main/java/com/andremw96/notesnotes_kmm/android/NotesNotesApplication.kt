@@ -1,7 +1,8 @@
 package com.andremw96.notesnotes_kmm.android
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.andremw96.notesnotes_kmm.android.di.appModule
+import com.andremw96.notesnotes_kmm.di.module.platformModule
 import com.andremw96.notesnotes_kmm.di.module.repositoryModule
 import com.andremw96.notesnotes_kmm.di.module.serviceModule
 import com.andremw96.notesnotes_kmm.di.module.useCaseModule
@@ -16,7 +17,7 @@ class NotesNotesApplication : MultiDexApplication() {
         startKoin {
             androidContext(this@NotesNotesApplication)
             androidLogger()
-            modules(appModule + serviceModule + repositoryModule + useCaseModule)
+            modules(platformModule + appModule + serviceModule + repositoryModule + useCaseModule)
         }
     }
 }
