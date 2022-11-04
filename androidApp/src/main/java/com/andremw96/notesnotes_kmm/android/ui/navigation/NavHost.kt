@@ -3,6 +3,7 @@ package com.andremw96.notesnotes_kmm.android.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,8 +40,18 @@ fun NotesNotesNavigation(
             }
         }
         composable(NavGraphConstant.note_list) {
-            val viewmodel : ListNoteViewModel = getViewModel()
-            ListNoteScreen(viewmodel)
+            val viewmodel: ListNoteViewModel = getViewModel()
+
+            LaunchedEffect(key1 = Unit) {
+                viewmodel.fetchData()
+            }
+
+            ListNoteScreen(viewmodel) {
+                navController.navigate(route = NavGraphConstant.login) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                }
+                navController.graph.setStartDestination(NavGraphConstant.login)
+            }
         }
     }
 }

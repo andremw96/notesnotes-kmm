@@ -18,11 +18,17 @@ abstract class BaseRepository {
             try {
                 val response: HttpResponse = apiToBeCalled()
 
-                if (response.status == HttpStatusCode.OK) {
-                    Resource.Success(data = response.body())
-                } else {
-                    val errorResponse: ErrorResponse? = convertErrorBody(response.body())
-                    Resource.Error(errorResponse?.error ?: "Something went wrong")
+                when (response.status) {
+                    HttpStatusCode.OK -> {
+                        Resource.Success(data = response.body())
+                    }
+                    HttpStatusCode.Unauthorized -> {
+                        Resource.Error("Unauthorized")
+                    }
+                    else -> {
+                        val errorResponse: ErrorResponse? = convertErrorBody(response.body())
+                        Resource.Error(errorResponse?.error ?: "Something went wrong")
+                    }
                 }
             }  catch (e: IOException) {
                 Resource.Error("Please check your network connection ${e.message}")

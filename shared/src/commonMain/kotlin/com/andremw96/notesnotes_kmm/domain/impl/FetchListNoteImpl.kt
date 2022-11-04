@@ -9,7 +9,7 @@ import com.andremw96.notesnotes_kmm.network.utils.Resource
 class FetchListNoteImpl(
     private val listNoteRepository: ListNoteRepository,
 ) : FetchListNote {
-    override suspend fun invoke(): Resource<List<ListNoteSchema>> {
+    override suspend operator fun invoke(): Resource<List<ListNoteSchema>> {
         return ListNoteSchema.responseToSchema(listNoteRepository.fetchData())
     }
 }

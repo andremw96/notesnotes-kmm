@@ -24,4 +24,8 @@ class CredentialRepositoryImpl(
     override fun getAccessToken(): String? {
         return notesNotesPreferences.getString(NotesNotesPreferences.ACCESS_TOKEN_KEY)
     }
+
+    override fun removeCredential() {
+        notesNotesPreferences.clear()
+    }
 }

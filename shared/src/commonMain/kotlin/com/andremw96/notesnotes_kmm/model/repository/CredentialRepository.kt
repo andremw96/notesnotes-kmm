@@ -8,4 +8,5 @@ interface CredentialRepository {
     fun saveCredential(token: String, username: String, userId: Int)
     fun getCredential(): Credential
     fun getAccessToken(): String?
+    fun removeCredential()
 }

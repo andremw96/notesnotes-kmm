@@ -11,5 +11,6 @@ val useCaseModule = module {
     single<SaveCredential> { SaveCredentialImpl(get()) }
     single<GetCredential> { GetCredentialImpl(get()) }
     single<GetAccessToken> { GetAccessTokenImpl(get()) }
+    single<Logout> { LogoutImpl(get()) }
     single<FetchListNote> { FetchListNoteImpl(get()) }
 }

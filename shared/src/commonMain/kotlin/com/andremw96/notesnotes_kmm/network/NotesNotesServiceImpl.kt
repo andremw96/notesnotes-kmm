@@ -3,6 +3,7 @@ package com.andremw96.notesnotes_kmm.network
 import com.andremw96.notesnotes_kmm.domain.GetAccessToken
 import com.andremw96.notesnotes_kmm.network.model.login.LoginRequest
 import io.ktor.client.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
@@ -15,6 +16,12 @@ class NotesNotesServiceImpl(
     private val getAccessToken: GetAccessToken,
 ) : NotesNotesService {
     private val client = HttpClient() {
+        defaultRequest {
+            val authToken = getAccessToken()
+            authToken?.let { tokenHeader ->
+                header("Authorization", "Bearer $tokenHeader")
+            }
+        }
         install(Logging) {
             logger = Logger.DEFAULT
             level = LogLevel.ALL
@@ -25,12 +32,6 @@ class NotesNotesServiceImpl(
                     prettyPrint = true
                     isLenient = true
                 }
-            )
-        }
-        val accessToken = getAccessToken()
-        if (accessToken != null) {
-            headersOf(
-                "Authorization", "Bearer $accessToken"
             )
         }
     }
