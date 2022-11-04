@@ -3,7 +3,7 @@ package com.andremw96.notesnotes_kmm.model.repository.impl
 import com.andremw96.notesnotes_kmm.model.repository.BaseRepository
 import com.andremw96.notesnotes_kmm.model.repository.LoginRepository
 import com.andremw96.notesnotes_kmm.network.NotesNotesService
-import com.andremw96.notesnotes_kmm.network.model.LoginUserResponse
+import com.andremw96.notesnotes_kmm.network.model.login.LoginUserResponse
 import com.andremw96.notesnotes_kmm.network.utils.Resource
 import com.andremw96.notesnotes_kmm.sharedpreferences.NotesNotesPreferences
 import com.andremw96.notesnotes_kmm.sharedpreferences.NotesNotesPreferences.Companion.ACCESS_TOKEN_KEY

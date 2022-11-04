@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteScreen
+import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteViewModel
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginFormState
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginScreen
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginViewModel
@@ -38,7 +39,8 @@ fun NotesNotesNavigation(
             }
         }
         composable(NavGraphConstant.note_list) {
-            ListNoteScreen()
+            val viewmodel : ListNoteViewModel = getViewModel()
+            ListNoteScreen(viewmodel)
         }
     }
 }
