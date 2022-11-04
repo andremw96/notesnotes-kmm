@@ -47,10 +47,8 @@ fun NotesNotesNavigation(
             }
 
             ListNoteScreen(viewmodel) {
-                navController.navigate(route = NavGraphConstant.login) {
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                }
-                navController.graph.setStartDestination(NavGraphConstant.login)
+                navController.popBackStack(NavGraphConstant.note_list, true)
+                navController.navigate(NavGraphConstant.login)
             }
         }
     }

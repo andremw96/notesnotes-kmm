@@ -1,11 +1,11 @@
 package com.andremw96.notesnotes_kmm.android.ui.listnotes
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -38,14 +38,34 @@ fun ListNoteScreen(
         mutableStateOf(false)
     }
 
+    var showMenu = remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text("Notes List")
+                },
+                actions = {
+                    IconButton(onClick = { showMenu.value = !showMenu.value }) {
+                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "")
+                    }
+                    DropdownMenu(
+                        expanded = showMenu.value,
+                        onDismissRequest = { showMenu.value = false }
+                    ) {
+                        DropdownMenuItem(onClick = {
+                            viewModel.logoutFromApps()
+                            onNavigateLogin()
+                        }) {
+                            Text(text = "Logout")
+                        }
+                    }
                 }
             )
-        }
+        },
     ) {
         when {
             state.isLoading -> CircularProgressIndicator()
@@ -145,7 +165,7 @@ fun ListNoteListItem(note: ListNoteSchema) {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
                 val date = LocalDate.parse(note.updatedAt, formatter)
                 val dateFormatted = SimpleDateFormat("dd/MM/yyyy").format(
-                        Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                    Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
                 )
 
                 Text(
