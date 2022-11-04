@@ -34,6 +34,7 @@ import java.util.*
 fun ListNoteScreen(
     viewModel: ListNoteViewModel,
     onNavigateLogin: () -> Unit,
+    onNavigateToAddEditScreen: () -> Unit,
 ) {
     val state = viewModel.listNoteState.observeAsState(initial = ListNoteState()).value
 
@@ -70,7 +71,9 @@ fun ListNoteScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = {
+                onNavigateToAddEditScreen()
+            }) {
                 Icon(Icons.Filled.Add,"")
             }
         }

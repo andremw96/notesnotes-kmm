@@ -7,6 +7,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.andremw96.notesnotes_kmm.android.ui.addeditnote.AddEditNoteScreen
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteScreen
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteViewModel
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginFormState
@@ -46,10 +47,16 @@ fun NotesNotesNavigation(
                 viewmodel.fetchData()
             }
 
-            ListNoteScreen(viewmodel) {
+            ListNoteScreen(viewmodel, onNavigateLogin = {
                 navController.popBackStack(NavGraphConstant.note_list, true)
                 navController.navigate(NavGraphConstant.login)
-            }
+            }, onNavigateToAddEditScreen = {
+                navController.navigate(NavGraphConstant.add_edit_note)
+            })
         }
+        composable(NavGraphConstant.add_edit_note) {
+            AddEditNoteScreen()
+        }
+
     }
 }
