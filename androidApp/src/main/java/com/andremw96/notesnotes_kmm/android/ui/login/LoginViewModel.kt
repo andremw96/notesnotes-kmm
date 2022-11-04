@@ -24,13 +24,13 @@ class LoginViewModel(
     fun checkLogin() {
         viewModelScope.launch {
             val credential = getCredential.invoke()
-            if (credential.first != "" && credential.second != "") {
+            if (credential.accessToken != "" && credential.username != "" && credential.userid != -1) {
                 _loginForm.postValue(
                     LoginFormState(
-                        username = credential.second,
+                        username = credential.username!!,
                         password = "",
                         email = null,
-                        accessToken = credential.first,
+                        accessToken = credential.accessToken,
                         usernameError = null,
                         passwordError = null,
                         loginError = null,
@@ -90,8 +90,10 @@ class LoginViewModel(
                             isLoginSuccess = true
                         )
                     )
-                    login.data?.accessToken?.let {
-                        saveCredential.invoke(username, it)
+                    login.data?.accessToken?.let { accessToken ->
+                        login.data?.user?.userId?.let { userId ->
+                            saveCredential.invoke(username, accessToken, userId)
+                        }
                     }
                 } else {
                     _loginForm.postValue(

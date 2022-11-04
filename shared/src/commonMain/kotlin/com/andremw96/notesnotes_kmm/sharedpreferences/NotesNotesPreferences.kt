@@ -4,6 +4,7 @@ interface NotesNotesPreferences {
     companion object {
         const val ACCESS_TOKEN_KEY = "access_token"
         const val USERNAME_KEY = "username"
+        const val USER_ID_KEY = "user_id"
     }
 
     fun setInt(key: String, value: Int)

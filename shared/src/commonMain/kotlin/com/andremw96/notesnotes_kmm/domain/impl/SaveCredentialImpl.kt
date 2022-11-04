@@ -6,7 +6,7 @@ import com.andremw96.notesnotes_kmm.model.repository.LoginRepository
 class SaveCredentialImpl(
     private val loginRepository: LoginRepository
 ) : SaveCredential {
-    override suspend fun invoke(username: String, token: String) {
-        loginRepository.saveCredential(token = token, username = username)
+    override suspend fun invoke(username: String, token: String, userId: Int) {
+        loginRepository.saveCredential(token = token, username = username, userId = userId)
     }
 }

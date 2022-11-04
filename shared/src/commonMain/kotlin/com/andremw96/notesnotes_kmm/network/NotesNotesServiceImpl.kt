@@ -1,5 +1,6 @@
 package com.andremw96.notesnotes_kmm.network
 
+import com.andremw96.notesnotes_kmm.domain.GetAccessToken
 import com.andremw96.notesnotes_kmm.network.model.login.LoginRequest
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -10,7 +11,9 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-class NotesNotesServiceImpl : NotesNotesService {
+class NotesNotesServiceImpl(
+    private val getAccessToken: GetAccessToken,
+) : NotesNotesService {
     private val client = HttpClient() {
         install(Logging) {
             logger = Logger.DEFAULT
@@ -24,6 +27,10 @@ class NotesNotesServiceImpl : NotesNotesService {
                 }
             )
         }
+        val accessToken = getAccessToken()
+        headersOf(
+            "Authorization", "Bearer $accessToken"
+        )
     }
     private val API_URL = "http://192.168.100.4:8080"
 
@@ -36,5 +43,10 @@ class NotesNotesServiceImpl : NotesNotesService {
         }
 
         return response
+    }
+
+    override suspend fun fetchListNotes(userId: String): HttpResponse {
+        val url = "$API_URL/notes?user_id=$userId"
+        return client.get(url)
     }
 }
