@@ -2,7 +2,6 @@ package com.andremw96.notesnotes_kmm.network.model.login
 
 import kotlinx.serialization.SerialName
 
-
 @kotlinx.serialization.Serializable
 data class LoginUserResponse(
     @SerialName("access_token") val accessToken: String,

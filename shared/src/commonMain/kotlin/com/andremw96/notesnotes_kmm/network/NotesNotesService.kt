@@ -4,5 +4,5 @@ import io.ktor.client.statement.*
 
 interface NotesNotesService {
     suspend fun login(username: String, password: String): HttpResponse
-    suspend fun fetchListNotes(userId: String): HttpResponse
+    suspend fun fetchListNotes(userId: Int): HttpResponse
 }

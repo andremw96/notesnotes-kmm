@@ -1,12 +1,12 @@
 package com.andremw96.notesnotes_kmm.domain.impl
 
 import com.andremw96.notesnotes_kmm.domain.SaveCredential
-import com.andremw96.notesnotes_kmm.model.repository.LoginRepository
+import com.andremw96.notesnotes_kmm.model.repository.CredentialRepository
 
 class SaveCredentialImpl(
-    private val loginRepository: LoginRepository
+    private val credentialRepository: CredentialRepository
 ) : SaveCredential {
     override suspend fun invoke(username: String, token: String, userId: Int) {
-        loginRepository.saveCredential(token = token, username = username, userId = userId)
+        credentialRepository.saveCredential(token = token, username = username, userId = userId)
     }
 }

@@ -28,11 +28,13 @@ class NotesNotesServiceImpl(
             )
         }
         val accessToken = getAccessToken()
-        headersOf(
-            "Authorization", "Bearer $accessToken"
-        )
+        if (accessToken != null) {
+            headersOf(
+                "Authorization", "Bearer $accessToken"
+            )
+        }
     }
-    private val API_URL = "http://192.168.100.4:8080"
+    private val API_URL = "http://192.168.100.6:8080"
 
     override suspend fun login(username: String, password: String): HttpResponse {
         val url = "$API_URL/user/login"
@@ -45,7 +47,7 @@ class NotesNotesServiceImpl(
         return response
     }
 
-    override suspend fun fetchListNotes(userId: String): HttpResponse {
+    override suspend fun fetchListNotes(userId: Int): HttpResponse {
         val url = "$API_URL/notes?user_id=$userId"
         return client.get(url)
     }

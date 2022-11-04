@@ -1,12 +1,12 @@
 package com.andremw96.notesnotes_kmm.domain.impl
 
 import com.andremw96.notesnotes_kmm.domain.GetAccessToken
-import com.andremw96.notesnotes_kmm.model.repository.LoginRepository
+import com.andremw96.notesnotes_kmm.model.repository.CredentialRepository
 
 class GetAccessTokenImpl(
-    private val loginRepository: LoginRepository,
+    private val credentialRepository: CredentialRepository,
 ) : GetAccessToken {
     override operator fun invoke(): String? {
-        return loginRepository.getAccessToken()
+        return credentialRepository.getAccessToken()
     }
 }

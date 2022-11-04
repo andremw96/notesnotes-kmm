@@ -17,7 +17,13 @@ class NotesNotesApplication : MultiDexApplication() {
         startKoin {
             androidContext(this@NotesNotesApplication)
             androidLogger()
-            modules(platformModule + appModule + serviceModule + repositoryModule + useCaseModule)
+            modules(
+                platformModule,
+                appModule,
+                serviceModule,
+                repositoryModule,
+                useCaseModule,
+            )
         }
     }
 }
