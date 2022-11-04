@@ -18,12 +18,28 @@ class LoginViewModel(
     private val getCredential: GetCredential,
 ) : ViewModel() {
 
-    init {
-
-    }
-
-    private val _loginForm = MutableLiveData<LoginFormState>()
+    private var _loginForm: MutableLiveData<LoginFormState> = MutableLiveData()
     val loginFormState: LiveData<LoginFormState> = _loginForm
+
+    fun checkLogin() {
+        viewModelScope.launch {
+            val credential = getCredential.invoke()
+            if (credential.first != "" && credential.second != "") {
+                _loginForm.postValue(
+                    LoginFormState(
+                        username = credential.second,
+                        password = "",
+                        email = null,
+                        accessToken = credential.first,
+                        usernameError = null,
+                        passwordError = null,
+                        loginError = null,
+                        isLoginSuccess = true
+                    )
+                )
+            }
+        }
+    }
 
     fun loginDataChanged(username: String, password: String) {
         var usernameError: String? = null
@@ -48,7 +64,7 @@ class LoginViewModel(
         )
     }
 
-    suspend fun login(username: String, password: String) {
+    fun login(username: String, password: String) {
         viewModelScope.launch {
             _loginForm.postValue(
                 LoginFormState(
