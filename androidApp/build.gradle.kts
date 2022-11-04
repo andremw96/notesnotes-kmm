@@ -65,4 +65,7 @@ dependencies {
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+
+    // swipe refresh
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 }

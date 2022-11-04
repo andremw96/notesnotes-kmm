@@ -15,5 +15,5 @@ data class LoginFormState(
     val isLoginSuccess: Boolean = false,
 ) {
     val isDataValid: Boolean
-        get() = usernameError == null && passwordError == null
+        get() = usernameError == null && passwordError == null && username.isNotEmpty() && password.isNotEmpty()
 }

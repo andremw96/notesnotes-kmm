@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -21,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andremw96.notesnotes_kmm.android.ui.widget.DismissDialog
 import com.andremw96.notesnotes_kmm.domain.model.ListNoteSchema
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -66,6 +69,11 @@ fun ListNoteScreen(
                 }
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {}) {
+                Icon(Icons.Filled.Add,"")
+            }
+        }
     ) {
         when {
             state.isLoading -> CircularProgressIndicator()
@@ -77,7 +85,6 @@ fun ListNoteScreen(
                 }
             }
             state.listData.isEmpty() -> ListNoteScreenTextMessage("Your Notes is Empty, lets add some notes")
-            state.listData.isNotEmpty() -> ListNoteList(state.listData)
         }
 
         if (logoutDialog.value) {
@@ -91,6 +98,12 @@ fun ListNoteScreen(
                 title = "Something went wrong",
                 bodyMessage = state.error ?: "Something went wrong"
             )
+        }
+
+        SwipeRefresh(state = rememberSwipeRefreshState(state.isLoading), onRefresh = {
+            viewModel.fetchData()
+        }) {
+            ListNoteList(state.listData)
         }
     }
 }
