@@ -35,11 +35,15 @@ class ListNoteViewModel(
                 is Resource.Loading -> _listNoteState.postValue(
                     ListNoteState(
                         isLoading = true,
+                        error = null,
+                        listData = listOf(),
                     )
                 )
                 is Resource.Success -> _listNoteState.postValue(
                     ListNoteState(
                         isLoading = false,
+                        error = null,
+                        listData = result.data ?: listOf()
                     )
                 )
             }
