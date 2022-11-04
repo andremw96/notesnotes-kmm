@@ -5,4 +5,5 @@ import com.andremw96.notesnotes_kmm.network.utils.Resource
 
 interface ListNoteRepository {
     suspend fun fetchData(): Resource<List<ListNoteResponseItem>>
+    suspend fun deleteNote(noteId: Int): Resource<List<ListNoteResponseItem>>
 }

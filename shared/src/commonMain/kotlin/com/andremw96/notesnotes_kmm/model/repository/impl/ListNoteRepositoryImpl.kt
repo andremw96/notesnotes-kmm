@@ -21,4 +21,8 @@ class ListNoteRepositoryImpl(
             Resource.Error("user id not found")
         }
     }
+
+    override suspend fun deleteNote(noteId: Int): Resource<List<ListNoteResponseItem>> {
+        TODO("Not yet implemented")
+    }
 }
