@@ -72,4 +72,6 @@ dependencies {
 
     // gson
     implementation("com.google.code.gson:gson:2.10")
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }
