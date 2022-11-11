@@ -1,29 +1,36 @@
 package com.andremw96.notesnotes_kmm.android.ui.listnotes
 
+import android.widget.Toast
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andremw96.notesnotes_kmm.android.ui.widget.DismissDialog
 import com.andremw96.notesnotes_kmm.domain.model.ListNoteSchema
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -74,7 +81,7 @@ fun ListNoteScreen(
             FloatingActionButton(onClick = {
                 onNavigateToAddEditScreen()
             }) {
-                Icon(Icons.Filled.Add,"")
+                Icon(Icons.Filled.Add, "")
             }
         }
     ) {
@@ -106,7 +113,12 @@ fun ListNoteScreen(
         SwipeRefresh(state = rememberSwipeRefreshState(state.isLoading), onRefresh = {
             viewModel.fetchData()
         }) {
-            ListNoteList(state.listData)
+            ListNoteList(
+                data = state.listData,
+                deleteItemAction = { noteId ->
+                    viewModel.deleteNote(noteId)
+                }
+            )
         }
     }
 }
@@ -135,8 +147,12 @@ fun ListNoteScreenTextMessage(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ListNoteList(data: List<ListNoteSchema>) {
+fun ListNoteList(
+    data: List<ListNoteSchema>,
+    deleteItemAction: (noteId: Int) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -145,12 +161,63 @@ fun ListNoteList(data: List<ListNoteSchema>) {
         items(
             items = data,
             itemContent = { item ->
-                ListNoteListItem(note = item)
+                val dismissState = rememberDismissState()
+                val coroutineScope = rememberCoroutineScope()
+                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                    // remove item
+                    coroutineScope.launch {
+                        deleteItemAction(item.id)
+
+                        dismissState.reset()
+                    }
+                }
+                SwipeToDismiss(
+                    state = dismissState,
+                    modifier = Modifier
+                        .padding(vertical = Dp(1f)),
+                    directions = setOf(
+                        DismissDirection.EndToStart
+                    ),
+                    dismissThresholds = { direction ->
+                        FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.1f else 0.05f)
+                    },
+                    background = {
+                        val color by animateColorAsState(
+                            when (dismissState.targetValue) {
+                                DismissValue.Default -> Color.White
+                                else -> Color.Red
+                            }
+                        )
+                        val alignment = Alignment.CenterEnd
+                        val icon = Icons.Default.Delete
+
+                        val scale by animateFloatAsState(
+                            if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                        )
+
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(color)
+                                .padding(horizontal = Dp(20f)),
+                            contentAlignment = alignment
+                        ) {
+                            Icon(
+                                icon,
+                                contentDescription = "Delete Icon",
+                                modifier = Modifier.scale(scale)
+                            )
+                        }
+                    },
+                ) {
+                    ListNoteListItem(note = item)
+                }
             }
         )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListNoteListItem(note: ListNoteSchema) {
     Card(
@@ -162,8 +229,10 @@ fun ListNoteListItem(note: ListNoteSchema) {
             )
             .fillMaxWidth(),
         elevation = 8.dp,
-    ) {
+        onClick = {
 
+        }
+    ) {
         Column(
             modifier = Modifier.padding(top = 12.dp, bottom = 12.dp, start = 8.dp, end = 8.dp)
         ) {

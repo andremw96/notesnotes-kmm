@@ -49,4 +49,8 @@ class ListNoteViewModel(
             }
         }
     }
+
+    fun deleteNote(noteId: Int) {
+
+    }
 }
