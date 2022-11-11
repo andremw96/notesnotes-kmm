@@ -1,8 +1,8 @@
 package com.andremw96.notesnotes_kmm.network
 
 import com.andremw96.notesnotes_kmm.domain.GetAccessToken
-import com.andremw96.notesnotes_kmm.network.model.listnotes.DeleteNoteRequest
-import com.andremw96.notesnotes_kmm.network.model.login.LoginRequest
+import com.andremw96.notesnotes_kmm.network.model.listnotes.request.DeleteNoteRequest
+import com.andremw96.notesnotes_kmm.network.model.login.request.LoginRequest
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*

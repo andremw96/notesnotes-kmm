@@ -10,6 +10,6 @@ val appModule = module {
         LoginViewModel(get(), get(), get(), get())
     }
     viewModel {
-        ListNoteViewModel(get(), get())
+        ListNoteViewModel(get(), get(), get())
     }
 }

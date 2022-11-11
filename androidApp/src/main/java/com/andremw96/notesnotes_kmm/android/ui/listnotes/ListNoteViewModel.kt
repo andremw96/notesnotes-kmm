@@ -4,15 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andremw96.notesnotes_kmm.domain.DeleteNote
 import com.andremw96.notesnotes_kmm.domain.FetchListNote
 import com.andremw96.notesnotes_kmm.domain.Logout
+import com.andremw96.notesnotes_kmm.domain.model.ListNoteSchema
 import com.andremw96.notesnotes_kmm.network.utils.Resource
 import kotlinx.coroutines.launch
 
 class ListNoteViewModel(
     private val fetchListNote: FetchListNote,
     private val logout: Logout,
-): ViewModel() {
+    private val deleteNote: DeleteNote,
+) : ViewModel() {
     private var _listNoteState: MutableLiveData<ListNoteState> = MutableLiveData()
     val listNoteState: LiveData<ListNoteState> = _listNoteState
 
@@ -24,7 +27,7 @@ class ListNoteViewModel(
 
     fun fetchData() {
         viewModelScope.launch {
-            when(val result = fetchListNote()) {
+            when (val result = fetchListNote()) {
                 is Resource.Error -> _listNoteState.postValue(
                     ListNoteState(
                         isLoading = false,
@@ -50,7 +53,34 @@ class ListNoteViewModel(
         }
     }
 
-    fun deleteNote(noteId: Int) {
+    fun deleteNoteData(note: ListNoteSchema) {
+        viewModelScope.launch {
+            when (val result = deleteNote(note.id)) {
+                is Resource.Error -> _listNoteState.postValue(
+                    ListNoteState(
+                        isLoading = false,
+                        error = result.message
+                    )
+                )
+                is Resource.Loading -> _listNoteState.postValue(
+                    ListNoteState(
+                        isLoading = true,
+                        error = null,
+                    )
+                )
+                is Resource.Success -> {
+                    val newDataState = _listNoteState.value?.listData?.toMutableList()
+                    newDataState?.remove(note)
 
+                    _listNoteState.postValue(
+                        ListNoteState(
+                            isLoading = false,
+                            error = null,
+                            listData = newDataState ?: listOf()
+                        )
+                    )
+                }
+            }
+        }
     }
 }

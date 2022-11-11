@@ -1,4 +1,4 @@
-package com.andremw96.notesnotes_kmm.network.model.listnotes
+package com.andremw96.notesnotes_kmm.network.model.listnotes.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -13,4 +13,5 @@ val useCaseModule = module {
     single<GetAccessToken> { GetAccessTokenImpl(get()) }
     single<Logout> { LogoutImpl(get()) }
     single<FetchListNote> { FetchListNoteImpl(get()) }
+    single<DeleteNote> { DeleteNoteImpl(get()) }
 }

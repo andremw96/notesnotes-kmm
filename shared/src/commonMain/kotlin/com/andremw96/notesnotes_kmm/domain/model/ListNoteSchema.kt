@@ -1,6 +1,6 @@
 package com.andremw96.notesnotes_kmm.domain.model
 
-import com.andremw96.notesnotes_kmm.network.model.listnotes.ListNoteResponseItem
+import com.andremw96.notesnotes_kmm.network.model.listnotes.response.ListNoteResponseItem
 import com.andremw96.notesnotes_kmm.network.utils.Resource
 
 data class ListNoteSchema(

@@ -1,4 +1,4 @@
-package com.andremw96.notesnotes_kmm.network.model.login
+package com.andremw96.notesnotes_kmm.network.model.login.response
 
 import kotlinx.serialization.SerialName
 
