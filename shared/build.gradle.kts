@@ -3,6 +3,7 @@ plugins {
     id("com.android.library")
     id("kotlin-kapt")
     id("kotlinx-serialization")
+    id("kotlin-parcelize")
 }
 
 kotlin {

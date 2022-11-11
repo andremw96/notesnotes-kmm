@@ -1,5 +1,6 @@
 package com.andremw96.notesnotes_kmm.android.ui.listnotes
 
+import android.net.Uri
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -24,10 +25,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.andremw96.notesnotes_kmm.android.model.NoteItem
+import com.andremw96.notesnotes_kmm.android.ui.navigation.NavGraphConstant
 import com.andremw96.notesnotes_kmm.android.ui.widget.DismissDialog
-import com.andremw96.notesnotes_kmm.domain.model.ListNoteSchema
+import com.andremw96.notesnotes_kmm.android.ui.widget.NotesToolbar
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -38,8 +43,8 @@ import java.util.*
 @Composable
 fun ListNoteScreen(
     viewModel: ListNoteViewModel,
+    navController: NavHostController,
     onNavigateLogin: () -> Unit,
-    onNavigateToAddEditScreen: () -> Unit,
 ) {
     val state = viewModel.listNoteState.observeAsState(initial = ListNoteState()).value
 
@@ -53,31 +58,31 @@ fun ListNoteScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text("Notes List")
-                },
-                actions = {
-                    IconButton(onClick = { showMenu.value = !showMenu.value }) {
-                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "")
-                    }
-                    DropdownMenu(
-                        expanded = showMenu.value,
-                        onDismissRequest = { showMenu.value = false }
-                    ) {
-                        DropdownMenuItem(onClick = {
-                            viewModel.logoutFromApps()
-                            onNavigateLogin()
-                        }) {
-                            Text(text = "Logout")
-                        }
+            NotesToolbar(
+                navController = navController, title = "Notes List"
+            ) {
+                IconButton(onClick = { showMenu.value = !showMenu.value }) {
+                    Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "")
+                }
+                DropdownMenu(
+                    expanded = showMenu.value,
+                    onDismissRequest = { showMenu.value = false }
+                ) {
+                    DropdownMenuItem(onClick = {
+                        viewModel.logoutFromApps()
+                        onNavigateLogin()
+                    }) {
+                        Text(text = "Logout")
                     }
                 }
-            )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                onNavigateToAddEditScreen()
+                val json = Uri.encode(Gson().toJson(
+                    NoteItem.default()
+                ))
+                navController.navigate("${NavGraphConstant.add_edit_note}/$json")
             }) {
                 Icon(Icons.Filled.Add, "")
             }
@@ -115,6 +120,10 @@ fun ListNoteScreen(
                 data = state.listData,
                 deleteItemAction = { noteItem ->
                     viewModel.deleteNoteData(noteItem)
+                },
+                itemOnClick = { clickedItem ->
+                    val json = Uri.encode(Gson().toJson(clickedItem))
+                    navController.navigate("${NavGraphConstant.add_edit_note}/${json}")
                 }
             )
         }
@@ -148,21 +157,24 @@ fun ListNoteScreenTextMessage(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListNoteList(
-    data: List<ListNoteSchema>,
-    deleteItemAction: (noteItem: ListNoteSchema) -> Unit,
+    data: List<NoteItem>,
+    deleteItemAction: (noteItem: NoteItem) -> Unit,
+    itemOnClick: (note: NoteItem) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(data, { notesList: ListNoteSchema -> notesList.id }) { item ->
+        items(data, { notesList: NoteItem -> notesList.id }) { item ->
             val dismissState = rememberDismissState()
             val coroutineScope = rememberCoroutineScope()
 
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
                 coroutineScope.launch {
                     deleteItemAction(item)
+
+                    dismissState.reset()
                 }
             }
             SwipeToDismiss(
@@ -204,7 +216,9 @@ fun ListNoteList(
                     }
                 },
             ) {
-                ListNoteListItem(note = item)
+                ListNoteListItem(note = item) {
+                    itemOnClick(it)
+                }
             }
         }
 
@@ -213,7 +227,10 @@ fun ListNoteList(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ListNoteListItem(note: ListNoteSchema) {
+fun ListNoteListItem(
+    note: NoteItem,
+    itemOnClick: (note: NoteItem) -> Unit,
+) {
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
@@ -224,7 +241,7 @@ fun ListNoteListItem(note: ListNoteSchema) {
             .fillMaxWidth(),
         elevation = 8.dp,
         onClick = {
-
+            itemOnClick(note)
         }
     ) {
         Column(

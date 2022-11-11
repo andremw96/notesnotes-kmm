@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -68,4 +69,7 @@ dependencies {
 
     // swipe refresh
     implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+
+    // gson
+    implementation("com.google.code.gson:gson:2.10")
 }

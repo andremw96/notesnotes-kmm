@@ -1,12 +1,16 @@
 package com.andremw96.notesnotes_kmm.android.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.andremw96.notesnotes_kmm.android.model.AssetParamType
+import com.andremw96.notesnotes_kmm.android.model.NoteItem
 import com.andremw96.notesnotes_kmm.android.ui.addeditnote.AddEditNoteScreen
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteScreen
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteViewModel
@@ -40,22 +44,31 @@ fun NotesNotesNavigation(
                 navController.navigate(NavGraphConstant.note_list)
             }
         }
-        composable(NavGraphConstant.note_list) {
+        composable(
+            route = NavGraphConstant.note_list,
+        ) {
             val viewmodel: ListNoteViewModel = getViewModel()
 
             LaunchedEffect(key1 = Unit) {
                 viewmodel.fetchData()
             }
 
-            ListNoteScreen(viewmodel, onNavigateLogin = {
+            ListNoteScreen(viewmodel, navController, onNavigateLogin = {
                 navController.popBackStack(NavGraphConstant.note_list, true)
                 navController.navigate(NavGraphConstant.login)
-            }, onNavigateToAddEditScreen = {
-                navController.navigate(NavGraphConstant.add_edit_note)
             })
         }
-        composable(NavGraphConstant.add_edit_note) {
-            AddEditNoteScreen()
+        composable(
+            route = "${NavGraphConstant.add_edit_note}/{${NavGraphConstant.note_details_id_key}}",
+            arguments = listOf(
+                navArgument(NavGraphConstant.note_details_id_key) { type = AssetParamType() }
+            ),
+        ) {
+            val noteItem = it.arguments?.getParcelable<NoteItem>(NavGraphConstant.note_details_id_key)
+            AddEditNoteScreen(
+                navController = navController,
+                noteItem = noteItem
+            )
         }
 
     }

@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andremw96.notesnotes_kmm.android.model.NoteItem
 import com.andremw96.notesnotes_kmm.domain.DeleteNote
 import com.andremw96.notesnotes_kmm.domain.FetchListNote
 import com.andremw96.notesnotes_kmm.domain.Logout
-import com.andremw96.notesnotes_kmm.domain.model.ListNoteSchema
 import com.andremw96.notesnotes_kmm.network.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -46,14 +46,16 @@ class ListNoteViewModel(
                     ListNoteState(
                         isLoading = false,
                         error = null,
-                        listData = result.data ?: listOf()
+                        listData = result.data?.map {
+                            NoteItem.schemaToItem(it)
+                        } ?: listOf()
                     )
                 )
             }
         }
     }
 
-    fun deleteNoteData(note: ListNoteSchema) {
+    fun deleteNoteData(note: NoteItem) {
         viewModelScope.launch {
             when (val result = deleteNote(note.id)) {
                 is Resource.Error -> _listNoteState.postValue(

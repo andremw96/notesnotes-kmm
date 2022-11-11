@@ -1,34 +1,24 @@
 package com.andremw96.notesnotes_kmm.android.ui.addeditnote
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.andremw96.notesnotes_kmm.android.model.NoteItem
+import com.andremw96.notesnotes_kmm.android.ui.widget.NotesToolbar
 
 @Composable
-fun AddEditNoteScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+fun AddEditNoteScreen(
+    navController: NavHostController,
+    noteItem: NoteItem?,
+) {
+    Scaffold(
+        topBar = {
+            NotesToolbar(
+                navController,
+                if (noteItem == null || noteItem.title == "") "Add New Note" else "Edit ${noteItem.title}"
+            )
+        },
     ) {
-        Text(
-            text = "add or edit your note",
-            fontFamily = FontFamily.Monospace,
-            fontSize = 40.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            color = Color.Red,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
-        )
+
     }
 }
