@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.andremw96.notesnotes_kmm.android.model.AssetParamType
 import com.andremw96.notesnotes_kmm.android.model.NoteItem
 import com.andremw96.notesnotes_kmm.android.ui.addeditnote.AddEditNoteScreen
+import com.andremw96.notesnotes_kmm.android.ui.addeditnote.AddEditNoteViewModel
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteScreen
 import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteViewModel
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginFormState
@@ -64,8 +65,11 @@ fun NotesNotesNavigation(
                 navArgument(NavGraphConstant.note_details_id_key) { type = AssetParamType() }
             ),
         ) {
+            val viewModel: AddEditNoteViewModel = getViewModel()
+
             val noteItem = it.arguments?.getParcelable<NoteItem>(NavGraphConstant.note_details_id_key)
             AddEditNoteScreen(
+                viewModel = viewModel,
                 navController = navController,
                 noteItem = noteItem
             )

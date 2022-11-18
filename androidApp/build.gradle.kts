@@ -45,6 +45,9 @@ dependencies {
     val koinVersion = rootProject.extra["koinVersion"]
     val navVersion = rootProject.extra["androidComposeNavVersion"]
     val coroutineVersion = rootProject.extra["coroutineVersion"]
+    val androidComposeConstraintLayoutVersion = rootProject.extra["androidComposeConstraintLayoutVersion"]
+    val gsonVersion = rootProject.extra["gsonVersion"]
+    val accompanistSwipeRefresh = rootProject.extra["accompanistSwipeRefresh"]
 
     implementation("androidx.appcompat:appcompat:$androidAppCompatVersion")
     implementation("com.google.android.material:material:$androidMaterialVersion")
@@ -56,6 +59,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:$activityComposeVersion")
     implementation("com.android.support:multidex:$multiDexVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation("androidx.constraintlayout:constraintlayout-compose:$androidComposeConstraintLayoutVersion")
+    implementation("androidx.compose.material:material-icons-extended:$androidComposeUiVersion")
+
     // compose live data
     implementation("androidx.compose.runtime:runtime-livedata:$androidComposeLiveDataVersion")
 
@@ -68,10 +74,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
 
     // swipe refresh
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistSwipeRefresh")
 
     // gson
-    implementation("com.google.code.gson:gson:2.10")
-
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("com.google.code.gson:gson:$gsonVersion")
 }

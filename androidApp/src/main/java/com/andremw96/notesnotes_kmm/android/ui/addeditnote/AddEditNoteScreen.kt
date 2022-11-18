@@ -1,12 +1,16 @@
 package com.andremw96.notesnotes_kmm.android.ui.addeditnote
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,22 +20,33 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidation
 import com.andremw96.notesnotes_kmm.android.model.NoteItem
+import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteState
 import com.andremw96.notesnotes_kmm.android.ui.widget.NotesToolbar
 
 @Composable
 fun AddEditNoteScreen(
+    viewModel: AddEditNoteViewModel,
     navController: NavHostController,
     noteItem: NoteItem?,
 ) {
-    val isNewNote = remember {
-        mutableStateOf(noteItem == null || noteItem.title == "")
-    }
+    val state = viewModel.addEditState.observeAsState(initial = AddEditNoteState(
+        title = noteItem?.title ?: "",
+        description = noteItem?.description ?: "",
+        isNewNote = noteItem == null || noteItem.title == ""
+    )).value
 
     Scaffold(
         topBar = {
             NotesToolbar(
                 navController,
-                if (isNewNote.value) "Add New Note" else "Edit ${noteItem?.title}"
+                if (state.isNewNote) "Add New Note" else "Edit ${noteItem?.title}",
+                actions = {
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(imageVector = Icons.Filled.Save, contentDescription = "")
+                    }
+                }
             )
         },
     ) {
@@ -45,10 +60,14 @@ fun AddEditNoteScreen(
                 val (textField1, textField2) = createRefs()
 
                 OutlinedTextFieldValidation(
-                    value = noteItem?.title ?: "",
+                    value = state.title,
                     onValueChange = {
+                        viewModel.addEditDataChanged(
+                            title = it,
+                            description = state.description,
+                        )
                     },
-                    error = "",
+                    error = state.titleError ?: "",
                     singleLine = true,
                     label = {
                         Text(text = "Enter note title")
@@ -63,11 +82,14 @@ fun AddEditNoteScreen(
                 )
 
                 OutlinedTextFieldValidation(
-                    value = noteItem?.description ?: "",
+                    value = state.description,
                     onValueChange = {
-
+                        viewModel.addEditDataChanged(
+                            title = state.title,
+                            description = it
+                        )
                     },
-                    error = "",
+                    error = state.descriptionError ?: "",
                     singleLine = false,
                     label = {
                         Text(text = "Enter note description")

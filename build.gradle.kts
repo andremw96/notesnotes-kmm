@@ -7,6 +7,8 @@ buildscript {
         set("androidComposeLiveDataVersion", "1.3.0-rc01")
         set("multiDexVersion", "2.0.1")
         set("androidComposeNavVersion", "2.5.2")
+        set("androidComposeConstraintLayoutVersion", "1.0.1")
+        set("accompanistSwipeRefresh", "0.27.0")
 
         // koin
         set("koinVersion", "3.2.2")
@@ -14,6 +16,9 @@ buildscript {
         // ktor
         set("ktorVersion", "2.1.2")
         set("coroutineVersion", "1.6.4")
+
+        // gson
+        set("gsonVersion", "2.10")
     }
 }
 
