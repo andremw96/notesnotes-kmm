@@ -1,16 +1,15 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
-package com.andremw96.notesnotes_kmm.android.ui.login
+package com.andremw96.notesnotes_kmm.android.ui.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,25 +24,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andremw96.notesnotes_kmm.android.composable.OutlinedTextFieldValidation
-import com.andremw96.notesnotes_kmm.android.ui.widget.DismissDialog
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel,
-    onNavigateToNoteList: () -> Unit,
-    onNavigateToSignup: () -> Unit,
-) {
-    val state = viewModel.loginFormState.observeAsState(
-        initial = LoginFormState()
-    ).value
-
-    val scope = rememberCoroutineScope()
-
-    val openDialog = remember {
-        mutableStateOf(false)
-    }
-
+fun SignupScreen() {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -51,33 +35,10 @@ fun LoginScreen(
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LaunchedEffect(key1 = state) {
-            when {
-                state.isLoginSuccess -> {
-                    openDialog.value = false
-                    onNavigateToNoteList()
-                }
-                state.loginError != null -> {
-                    openDialog.value = true
-                }
-            }
-        }
-
-        if (openDialog.value) {
-            DismissDialog(
-                onDismissClicked = {
-                    openDialog.value = false
-                },
-                title = "Something went wrong",
-                bodyMessage = state.loginError ?: "Something went wrong"
-            )
-        }
-
         Text(
-            text = "Noted",
+            text = "Sign up",
             fontFamily = FontFamily.Monospace,
             fontSize = 40.sp,
             textAlign = TextAlign.Center,
@@ -89,15 +50,30 @@ fun LoginScreen(
         )
 
         OutlinedTextFieldValidation(
-            enabled = !state.isLoading,
-            value = state.username,
+            value = "",
             onValueChange = {
-                viewModel.loginDataChanged(
-                    it,
-                    state.password
-                )
+
             },
-            error = state.usernameError ?: "",
+            error = "",
+            singleLine = true,
+            label = {
+                Text(text = "Enter your email")
+            },
+            leadingIcon = {
+                Icon(Icons.Default.Email, contentDescription = "email")
+            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp, top = 12.dp)
+        )
+
+        OutlinedTextFieldValidation(
+            value = "",
+            onValueChange = {
+
+            },
+            error = "",
             singleLine = true,
             label = {
                 Text(text = "Enter your username")
@@ -112,15 +88,11 @@ fun LoginScreen(
         )
 
         OutlinedTextFieldValidation(
-            enabled = !state.isLoading,
-            value = state.password,
+            value = "",
             onValueChange = {
-                viewModel.loginDataChanged(
-                    state.username,
-                    it
-                )
+
             },
-            error = state.passwordError ?: "",
+            error = "",
             singleLine = true,
             label = {
                 Text(text = "Enter your password")
@@ -135,38 +107,44 @@ fun LoginScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
 
+        OutlinedTextFieldValidation(
+            value = "",
+            onValueChange = {
+
+            },
+            error = "",
+            singleLine = true,
+            label = {
+                Text(text = "Enter your confirmation password")
+            },
+            leadingIcon = {
+                Icon(Icons.Default.Info, contentDescription = "password")
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+
+
         OutlinedButton(
             onClick = {
                 keyboardController?.hide()
-                scope.launch {
-                    try {
-                        viewModel.login(state.username, state.password)
-                    } catch (e: Exception) {
-                        e.localizedMessage ?: "error"
-                    }
-                }
+
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp, top = 12.dp),
-            enabled = state.isDataValid
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Login", textAlign = TextAlign.Center)
+                Text(text = "Signup", textAlign = TextAlign.Center)
 
-                if (state.isLoading) {
-                    CircularProgressIndicator()
-                }
+
             }
-        }
-
-        TextButton(onClick = {
-            onNavigateToSignup()
-        }) {
-            Text(text = "Create new account", color = Color.Blue)
         }
     }
 }

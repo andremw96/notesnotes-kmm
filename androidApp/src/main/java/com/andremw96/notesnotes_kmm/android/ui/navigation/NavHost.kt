@@ -18,6 +18,7 @@ import com.andremw96.notesnotes_kmm.android.ui.listnotes.ListNoteViewModel
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginFormState
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginScreen
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginViewModel
+import com.andremw96.notesnotes_kmm.android.ui.signup.SignupScreen
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -40,10 +41,21 @@ fun NotesNotesNavigation(
                 }
             }
 
-            LoginScreen(viewModel = loginViewModel) {
-                navController.popBackStack(NavGraphConstant.login, true)
-                navController.navigate(NavGraphConstant.note_list)
-            }
+            LoginScreen(
+                viewModel = loginViewModel,
+                onNavigateToNoteList = {
+                    navController.popBackStack(NavGraphConstant.login, true)
+                    navController.navigate(NavGraphConstant.note_list)
+                },
+                onNavigateToSignup = {
+                    navController.navigate(NavGraphConstant.signup)
+                }
+            )
+        }
+        composable(
+            route = NavGraphConstant.signup
+        ) {
+            SignupScreen()
         }
         composable(
             route = NavGraphConstant.note_list,
