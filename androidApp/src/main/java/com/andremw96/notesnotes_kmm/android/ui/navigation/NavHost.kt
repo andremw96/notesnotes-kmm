@@ -66,13 +66,19 @@ fun NotesNotesNavigation(
             ),
         ) {
             val viewModel: AddEditNoteViewModel = getViewModel()
-
             val noteItem = it.arguments?.getParcelable<NoteItem>(NavGraphConstant.note_details_id_key)
+
+            LaunchedEffect(key1 = Unit){
+                viewModel.initState(noteItem)
+            }
+
             AddEditNoteScreen(
                 viewModel = viewModel,
                 navController = navController,
-                noteItem = noteItem
-            )
+            ) {
+                navController.popBackStack(NavGraphConstant.login, true)
+                navController.navigate(NavGraphConstant.note_list)
+            }
         }
 
     }

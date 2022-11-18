@@ -14,6 +14,6 @@ val appModule = module {
         ListNoteViewModel(get(), get(), get())
     }
     viewModel {
-        AddEditNoteViewModel(get(),)
+        AddEditNoteViewModel(get(), get())
     }
 }

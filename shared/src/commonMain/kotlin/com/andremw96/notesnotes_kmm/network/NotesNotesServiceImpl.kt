@@ -1,6 +1,7 @@
 package com.andremw96.notesnotes_kmm.network
 
 import com.andremw96.notesnotes_kmm.domain.GetAccessToken
+import com.andremw96.notesnotes_kmm.network.model.addeditnote.AddEditNoteRequest
 import com.andremw96.notesnotes_kmm.network.model.listnotes.request.DeleteNoteRequest
 import com.andremw96.notesnotes_kmm.network.model.login.request.LoginRequest
 import io.ktor.client.*
@@ -60,6 +61,21 @@ class NotesNotesServiceImpl(
         val response = client.delete(url) {
             contentType(ContentType.Application.Json)
             setBody(deleteNoteRequest)
+        }
+
+        return response
+    }
+
+    override suspend fun saveNewNote(
+        userId: Int,
+        title: String,
+        description: String?
+    ): HttpResponse {
+        val url = "$API_URL/insertnote"
+        val saveNewNoteRequest = AddEditNoteRequest(userId, title, description)
+        val response = client.post(url) {
+            contentType(ContentType.Application.Json)
+            setBody(saveNewNoteRequest)
         }
 
         return response

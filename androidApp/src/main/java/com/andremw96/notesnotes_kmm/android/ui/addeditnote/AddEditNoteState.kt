@@ -9,7 +9,9 @@ data class AddEditNoteState(
     val titleError: String? = null,
     val descriptionError: String? = null,
     val isLoading: Boolean = false,
-    val isNewNote: Boolean = false
+    val isNewNote: Boolean = false,
+    val saveNoteSuccess: Boolean = false,
+    val saveNoteError: String? = null,
 ) {
     val isDataValid: Boolean
         get() = titleError == null && descriptionError == null && title.isNotEmpty() && description.isNotEmpty()
