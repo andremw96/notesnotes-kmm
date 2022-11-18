@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,8 +26,13 @@ import com.andremw96.notesnotes_kmm.android.ui.widget.NotesToolbar
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignupScreen(
+    viewModel: SignupViewModel,
     navHostController: NavHostController
 ) {
+    val state = viewModel.signupState.observeAsState(
+        initial = SignupState()
+    ).value
+
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
@@ -42,11 +48,11 @@ fun SignupScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextFieldValidation(
-                value = "",
+                value = state.email,
                 onValueChange = {
 
                 },
-                error = "",
+                error = state.emailError ?: "",
                 singleLine = true,
                 label = {
                     Text(text = "Enter your email")
@@ -61,11 +67,11 @@ fun SignupScreen(
             )
 
             OutlinedTextFieldValidation(
-                value = "",
+                value = state.username,
                 onValueChange = {
 
                 },
-                error = "",
+                error = state.usernameError ?: "",
                 singleLine = true,
                 label = {
                     Text(text = "Enter your username")
@@ -80,11 +86,11 @@ fun SignupScreen(
             )
 
             OutlinedTextFieldValidation(
-                value = "",
+                value = state.password,
                 onValueChange = {
 
                 },
-                error = "",
+                error = state.passwordError ?: "",
                 singleLine = true,
                 label = {
                     Text(text = "Enter your password")
@@ -100,11 +106,11 @@ fun SignupScreen(
             )
 
             OutlinedTextFieldValidation(
-                value = "",
+                value = state.confirmationPassword,
                 onValueChange = {
 
                 },
-                error = "",
+                error = state.confirmationPasswordError ?: "",
                 singleLine = true,
                 label = {
                     Text(text = "Enter your confirmation password")

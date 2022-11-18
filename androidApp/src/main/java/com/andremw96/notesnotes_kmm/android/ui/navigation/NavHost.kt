@@ -19,6 +19,7 @@ import com.andremw96.notesnotes_kmm.android.ui.login.LoginFormState
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginScreen
 import com.andremw96.notesnotes_kmm.android.ui.login.LoginViewModel
 import com.andremw96.notesnotes_kmm.android.ui.signup.SignupScreen
+import com.andremw96.notesnotes_kmm.android.ui.signup.SignupViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -55,8 +56,10 @@ fun NotesNotesNavigation(
         composable(
             route = NavGraphConstant.signup
         ) {
+            val viewModel: SignupViewModel = getViewModel()
             SignupScreen(
-                navController
+                viewModel = viewModel,
+                navHostController = navController
             )
         }
         composable(
