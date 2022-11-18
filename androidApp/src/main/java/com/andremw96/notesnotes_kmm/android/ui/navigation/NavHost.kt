@@ -55,7 +55,9 @@ fun NotesNotesNavigation(
         composable(
             route = NavGraphConstant.signup
         ) {
-            SignupScreen()
+            SignupScreen(
+                navController
+            )
         }
         composable(
             route = NavGraphConstant.note_list,

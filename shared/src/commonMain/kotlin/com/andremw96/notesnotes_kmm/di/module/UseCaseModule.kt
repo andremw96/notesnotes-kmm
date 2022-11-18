@@ -8,6 +8,7 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     single<Login> { LoginImpl(get()) }
+    single<Signup> { SignupImpl(get()) }
     single { LoginDataValidator() }
     single { AddEditNoteDataValidator() }
     single<SaveCredential> { SaveCredentialImpl(get()) }

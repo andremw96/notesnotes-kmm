@@ -5,6 +5,7 @@ import com.andremw96.notesnotes_kmm.network.model.addeditnote.SaveNewNoteRequest
 import com.andremw96.notesnotes_kmm.network.model.addeditnote.UpdateNoteRequest
 import com.andremw96.notesnotes_kmm.network.model.listnotes.request.DeleteNoteRequest
 import com.andremw96.notesnotes_kmm.network.model.login.request.LoginRequest
+import com.andremw96.notesnotes_kmm.network.model.signup.SignupRequest
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -43,6 +44,17 @@ class NotesNotesServiceImpl(
     override suspend fun login(username: String, password: String): HttpResponse {
         val url = "$API_URL/user/login"
         val loginRequest = LoginRequest(username, password)
+        val response = client.post(url) {
+            contentType(ContentType.Application.Json)
+            setBody(loginRequest)
+        }
+
+        return response
+    }
+
+    override suspend fun signup(email: String, username: String, password: String): HttpResponse {
+        val url = "$API_URL/user"
+        val loginRequest = SignupRequest(email = email, username = username, password = password)
         val response = client.post(url) {
             contentType(ContentType.Application.Json)
             setBody(loginRequest)
