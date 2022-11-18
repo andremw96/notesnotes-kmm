@@ -4,6 +4,7 @@ package com.andremw96.notesnotes_kmm.android.ui.addeditnote
  * Data validation state of the login form.
  */
 data class AddEditNoteState(
+    val noteId: Int = -1,
     val title: String = "",
     val description: String = "",
     val titleError: String? = null,

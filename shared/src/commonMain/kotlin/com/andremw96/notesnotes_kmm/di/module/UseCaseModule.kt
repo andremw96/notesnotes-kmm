@@ -17,4 +17,5 @@ val useCaseModule = module {
     single<FetchListNote> { FetchListNoteImpl(get()) }
     single<DeleteNote> { DeleteNoteImpl(get()) }
     single<SaveNewNote> { SaveNewNoteImpl(get()) }
+    single<UpdateNote> { UpdateNoteImpl(get()) }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andremw96.notesnotes_kmm.android.model.NoteItem
 import com.andremw96.notesnotes_kmm.domain.SaveNewNote
+import com.andremw96.notesnotes_kmm.domain.UpdateNote
 import com.andremw96.notesnotes_kmm.model.repository.AddEditNoteDataValidator
 import com.andremw96.notesnotes_kmm.network.utils.Resource
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 class AddEditNoteViewModel(
     private val addEditNoteDataValidator: AddEditNoteDataValidator,
     private val saveNewNote: SaveNewNote,
+    private val updateNote: UpdateNote
 ) : ViewModel() {
     private var _addEditState: MutableLiveData<AddEditNoteState> = MutableLiveData()
     val addEditState: LiveData<AddEditNoteState> = _addEditState
@@ -20,6 +22,7 @@ class AddEditNoteViewModel(
     fun initState(noteItem: NoteItem?) {
         _addEditState.postValue(
             AddEditNoteState(
+                noteId = noteItem?.id ?: -1,
                 title = noteItem?.title ?: "",
                 description = noteItem?.description ?: "",
                 isNewNote = noteItem == null || noteItem.title == ""
@@ -43,6 +46,7 @@ class AddEditNoteViewModel(
         val previousState = _addEditState.value
         _addEditState.postValue(
             AddEditNoteState(
+                noteId = previousState?.noteId ?: -1,
                 title = title,
                 description = description,
                 titleError = titleError,
@@ -57,6 +61,7 @@ class AddEditNoteViewModel(
         viewModelScope.launch {
             _addEditState.postValue(
                 AddEditNoteState(
+                    noteId = previousState?.noteId ?: -1,
                     title = title,
                     description = description,
                     isLoading = true,
@@ -71,6 +76,7 @@ class AddEditNoteViewModel(
                 if (saveNewNote is Resource.Success) {
                     _addEditState.postValue(
                         AddEditNoteState(
+                            noteId = previousState?.noteId ?: -1,
                             title = title,
                             description = description,
                             isLoading = false,
@@ -82,6 +88,53 @@ class AddEditNoteViewModel(
                 } else {
                     _addEditState.postValue(
                         AddEditNoteState(
+                            noteId = previousState?.noteId ?: -1,
+                            title = title,
+                            description = description,
+                            isLoading = false,
+                            saveNoteError = saveNewNote.message,
+                            isNewNote = previousState?.isNewNote ?: false,
+                            saveNoteSuccess = false,
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateNote(noteId: Int, title: String, description: String) {
+        val previousState = _addEditState.value
+        viewModelScope.launch {
+            _addEditState.postValue(
+                AddEditNoteState(
+                    noteId = previousState?.noteId ?: -1,
+                    title = title,
+                    description = description,
+                    isLoading = true,
+                    saveNoteError = null,
+                    isNewNote = previousState?.isNewNote ?: false,
+                    saveNoteSuccess = false,
+                )
+            )
+
+            if (_addEditState.value?.isDataValid == true) {
+                val saveNewNote = updateNote.invoke(noteId, title, description)
+                if (saveNewNote is Resource.Success) {
+                    _addEditState.postValue(
+                        AddEditNoteState(
+                            noteId = previousState?.noteId ?: -1,
+                            title = title,
+                            description = description,
+                            isLoading = false,
+                            saveNoteError = null,
+                            isNewNote = previousState?.isNewNote ?: false,
+                            saveNoteSuccess = true,
+                        )
+                    )
+                } else {
+                    _addEditState.postValue(
+                        AddEditNoteState(
+                            noteId = previousState?.noteId ?: -1,
                             title = title,
                             description = description,
                             isLoading = false,

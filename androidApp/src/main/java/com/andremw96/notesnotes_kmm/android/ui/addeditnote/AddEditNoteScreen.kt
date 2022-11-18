@@ -55,8 +55,14 @@ fun AddEditNoteScreen(
 
                             if (state.isNewNote) {
                                 viewModel.saveNote(
-                                    state.title,
-                                    state.description,
+                                    title = state.title,
+                                    description = state.description,
+                                )
+                            } else {
+                                viewModel.updateNote(
+                                    noteId = state.noteId,
+                                    title = state.title,
+                                    description = state.description
                                 )
                             }
                         }

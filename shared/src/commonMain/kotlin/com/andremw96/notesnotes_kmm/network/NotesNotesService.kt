@@ -7,4 +7,5 @@ interface NotesNotesService {
     suspend fun fetchListNotes(userId: Int): HttpResponse
     suspend fun deleteNote(userId: Int, noteId: Int): HttpResponse
     suspend fun saveNewNote(userId: Int, title: String, description: String?): HttpResponse
+    suspend fun updateNote(userId: Int, noteId: Int, title: String, description: String?): HttpResponse
 }
