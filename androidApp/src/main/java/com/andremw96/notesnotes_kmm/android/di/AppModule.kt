@@ -18,6 +18,6 @@ val appModule = module {
         AddEditNoteViewModel(get(), get(), get())
     }
     viewModel {
-        SignupViewModel(get(), get())
+        SignupViewModel(get(), get(), get(), get())
     }
 }

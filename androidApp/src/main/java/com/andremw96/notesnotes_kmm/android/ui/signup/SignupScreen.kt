@@ -31,7 +31,8 @@ import com.andremw96.notesnotes_kmm.android.ui.widget.NotesToolbar
 @Composable
 fun SignupScreen(
     viewModel: SignupViewModel,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    onNavigateToNoteList: () -> Unit,
 ) {
     val state = viewModel.signupState.observeAsState(
         initial = SignupState()
@@ -50,11 +51,11 @@ fun SignupScreen(
     ) {
         LaunchedEffect(key1 = state) {
             when {
-                state.isSignupSuccess -> {
+                state.isLoginSuccess -> {
                     dialogError.value = false
-                    //onNavigateToNoteList()
+                    onNavigateToNoteList()
                 }
-                state.signupError != null -> {
+                state.buttonError != null -> {
                     dialogError.value = true
                 }
             }
@@ -66,7 +67,7 @@ fun SignupScreen(
                     dialogError.value = false
                 },
                 title = "Something went wrong",
-                bodyMessage = state.signupError ?: "something went wrong"
+                bodyMessage = state.buttonError ?: "something went wrong"
             )
         }
 

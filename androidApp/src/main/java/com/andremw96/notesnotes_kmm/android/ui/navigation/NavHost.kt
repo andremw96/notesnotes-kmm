@@ -1,11 +1,9 @@
 package com.andremw96.notesnotes_kmm.android.ui.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -29,7 +27,9 @@ fun NotesNotesNavigation(
     NavHost(navController = navController, startDestination = NavGraphConstant.login) {
         composable(NavGraphConstant.login) {
             val loginViewModel: LoginViewModel = getViewModel()
-            loginViewModel.checkLogin()
+            LaunchedEffect(key1 = Unit) {
+                loginViewModel.checkLogin()
+            }
 
             val state = loginViewModel.loginFormState.observeAsState(
                 initial = LoginFormState()
@@ -38,6 +38,7 @@ fun NotesNotesNavigation(
             LaunchedEffect(key1 = state) {
                 if (state.accessToken != null && state.username != "") {
                     navController.popBackStack(NavGraphConstant.login, true)
+                    navController.popBackStack(NavGraphConstant.note_list, true)
                     navController.navigate(NavGraphConstant.note_list)
                 }
             }
@@ -46,6 +47,7 @@ fun NotesNotesNavigation(
                 viewModel = loginViewModel,
                 onNavigateToNoteList = {
                     navController.popBackStack(NavGraphConstant.login, true)
+                    navController.popBackStack(NavGraphConstant.note_list, true)
                     navController.navigate(NavGraphConstant.note_list)
                 },
                 onNavigateToSignup = {
@@ -60,7 +62,11 @@ fun NotesNotesNavigation(
             SignupScreen(
                 viewModel = viewModel,
                 navHostController = navController
-            )
+            ) {
+                navController.popBackStack(NavGraphConstant.signup, true)
+                navController.popBackStack(NavGraphConstant.login, true)
+                navController.navigate(NavGraphConstant.note_list)
+            }
         }
         composable(
             route = NavGraphConstant.note_list,
@@ -83,9 +89,10 @@ fun NotesNotesNavigation(
             ),
         ) {
             val viewModel: AddEditNoteViewModel = getViewModel()
-            val noteItem = it.arguments?.getParcelable<NoteItem>(NavGraphConstant.note_details_id_key)
+            val noteItem =
+                it.arguments?.getParcelable<NoteItem>(NavGraphConstant.note_details_id_key)
 
-            LaunchedEffect(key1 = Unit){
+            LaunchedEffect(key1 = Unit) {
                 viewModel.initState(noteItem)
             }
 
@@ -93,7 +100,8 @@ fun NotesNotesNavigation(
                 viewModel = viewModel,
                 navController = navController,
             ) {
-                navController.popBackStack(NavGraphConstant.login, true)
+                navController.popBackStack(NavGraphConstant.add_edit_note, true)
+                navController.popBackStack(NavGraphConstant.note_list, true)
                 navController.navigate(NavGraphConstant.note_list)
             }
         }

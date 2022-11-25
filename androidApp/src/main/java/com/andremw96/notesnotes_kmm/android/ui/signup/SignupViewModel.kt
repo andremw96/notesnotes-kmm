@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andremw96.notesnotes_kmm.domain.Login
+import com.andremw96.notesnotes_kmm.domain.SaveCredential
 import com.andremw96.notesnotes_kmm.domain.Signup
 import com.andremw96.notesnotes_kmm.model.repository.SignupDataValidator
 import com.andremw96.notesnotes_kmm.network.utils.Resource
@@ -12,6 +14,8 @@ import kotlinx.coroutines.launch
 class SignupViewModel(
     private val signupDataValidator: SignupDataValidator,
     private val signupUseCase: Signup,
+    private val loginUseCase: Login,
+    private val saveCredential: SaveCredential,
 ) : ViewModel() {
     private var _signupState: MutableLiveData<SignupState> = MutableLiveData()
     val signupState: LiveData<SignupState> = _signupState
@@ -69,7 +73,7 @@ class SignupViewModel(
                     username = username,
                     password = password,
                     isLoading = true,
-                    isSignupSuccess = false
+                    isLoginSuccess = false,
                 )
             )
 
@@ -91,10 +95,61 @@ class SignupViewModel(
                             passwordError = null,
                             confirmationPasswordError = null,
                             isLoading = false,
-                            isSignupSuccess = true,
-                            signupError = null
+                            buttonError = null
                         )
                     )
+
+                    _signupState.postValue(
+                        SignupState(
+                            email = email,
+                            username = username,
+                            password = password,
+                            isLoading = true,
+                            isLoginSuccess = false,
+                        )
+                    )
+
+                    val login = loginUseCase.invoke(
+                        username, password
+                    )
+                    if (login is Resource.Success) {
+                        _signupState.postValue(
+                            SignupState(
+                                email = email,
+                                username = username,
+                                password = password,
+                                confirmationPassword = password,
+                                emailError = null,
+                                usernameError = null,
+                                passwordError = null,
+                                confirmationPasswordError = null,
+                                isLoading = false,
+                                isLoginSuccess = true,
+                                buttonError = null
+                            )
+                        )
+                        login.data?.accessToken?.let { accessToken ->
+                            login.data?.user?.userId?.let { userId ->
+                                saveCredential.invoke(username, accessToken, userId)
+                            }
+                        }
+                    } else {
+                        _signupState.postValue(
+                            SignupState(
+                                email = email,
+                                username = username,
+                                password = password,
+                                confirmationPassword = password,
+                                emailError = null,
+                                usernameError = null,
+                                passwordError = null,
+                                confirmationPasswordError = null,
+                                isLoading = false,
+                                isLoginSuccess = false,
+                                buttonError = login.message
+                            )
+                        )
+                    }
                 } else {
                     _signupState.postValue(
                         SignupState(
@@ -107,8 +162,8 @@ class SignupViewModel(
                             passwordError = null,
                             confirmationPasswordError = null,
                             isLoading = false,
-                            isSignupSuccess = false,
-                            signupError = signup.message
+                            isLoginSuccess = false,
+                            buttonError = signup.message
                         )
                     )
                 }

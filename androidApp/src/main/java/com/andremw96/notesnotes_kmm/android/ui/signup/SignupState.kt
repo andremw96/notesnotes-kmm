@@ -14,8 +14,8 @@ data class SignupState(
     val confirmationPasswordError: String? = null,
     val isLoading: Boolean = false,
     val accessToken: String? = null,
-    val signupError: String? = null,
-    val isSignupSuccess: Boolean = false,
+    val buttonError: String? = null,
+    val isLoginSuccess: Boolean = false,
 ) {
     val isDataValid: Boolean
         get() = email.isNotEmpty() &&
