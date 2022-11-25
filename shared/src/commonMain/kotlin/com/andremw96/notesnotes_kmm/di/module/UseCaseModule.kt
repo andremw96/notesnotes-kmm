@@ -4,6 +4,7 @@ import com.andremw96.notesnotes_kmm.domain.*
 import com.andremw96.notesnotes_kmm.domain.impl.*
 import com.andremw96.notesnotes_kmm.model.repository.AddEditNoteDataValidator
 import com.andremw96.notesnotes_kmm.model.repository.LoginDataValidator
+import com.andremw96.notesnotes_kmm.model.repository.SignupDataValidator
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -11,6 +12,7 @@ val useCaseModule = module {
     single<Signup> { SignupImpl(get()) }
     single { LoginDataValidator() }
     single { AddEditNoteDataValidator() }
+    single { SignupDataValidator() }
     single<SaveCredential> { SaveCredentialImpl(get()) }
     single<GetCredential> { GetCredentialImpl(get()) }
     single<GetAccessToken> { GetAccessTokenImpl(get()) }
