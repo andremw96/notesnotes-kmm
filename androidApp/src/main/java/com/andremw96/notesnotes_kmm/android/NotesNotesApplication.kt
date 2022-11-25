@@ -2,7 +2,7 @@ package com.andremw96.notesnotes_kmm.android
 
 import androidx.multidex.MultiDexApplication
 import com.andremw96.notesnotes_kmm.android.di.appModule
-import com.andremw96.notesnotes_kmm.di.module.platformModule
+import com.andremw96.notesnotes_kmm.module.platformModule
 import com.andremw96.notesnotes_kmm.di.module.repositoryModule
 import com.andremw96.notesnotes_kmm.di.module.serviceModule
 import com.andremw96.notesnotes_kmm.di.module.useCaseModule
