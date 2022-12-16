@@ -5,7 +5,7 @@ struct ContentView: View {
     let greet = IOSPlatform.init().name
 
 	var body: some View {
-		Text("hello " + greet)
+		LoginScreen()
 	}
 }
 
