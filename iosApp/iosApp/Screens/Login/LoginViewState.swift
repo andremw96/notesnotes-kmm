@@ -11,6 +11,11 @@ import Foundation
 struct LoginViewState {
     var username = ""
     var password = ""
-    var usernameError = "please fill username"
-    var passwordError = "please fill password"
+    var usernameError: String? = "please fill username"
+    var passwordError: String? = "please fill password"
+    var isLoading = false
+    
+    var isDataValid: Bool {
+        get { return usernameError == nil && usernameError == "" && passwordError == nil && passwordError == "" }
+    }
 }

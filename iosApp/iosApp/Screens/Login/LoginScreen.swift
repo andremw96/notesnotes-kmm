@@ -10,7 +10,7 @@ import SwiftUI
 import shared
 
 struct LoginScreen: View {
-    @StateObject private var viewModel = ViewModel(loginDataValidator: LoginDataValidator())
+    @StateObject private var viewModel = ViewModelProvider().provideLoginViewModel()
     
     var body: some View {
         VStack{
@@ -27,36 +27,46 @@ struct LoginScreen: View {
                     sfSymbolName: "person",
                     placeholder: "Username",
                     text: $viewModel.viewState.username,
-                    prompt: viewModel.viewState.usernameError
+                    prompt: viewModel.viewState.usernameError ?? ""
                 ).autocapitalization(.none)
                  .onChange(of: viewModel.viewState.username, perform: { char in
                      viewModel.validateUsernamePassword(username: char, password: viewModel.viewState.password)
                  })
+                 .disabled(viewModel.viewState.isLoading)
                 
                 PasswordView(
                     placeholder: "Password",
                     text: $viewModel.viewState.password,
-                    prompt: viewModel.viewState.passwordError
+                    prompt: viewModel.viewState.passwordError ?? ""
                 ).onChange(of: viewModel.viewState.password, perform: { char in
                     viewModel.validateUsernamePassword(username: viewModel.viewState.username, password: char)
                 })
+                .disabled(viewModel.viewState.isLoading)
             }.padding([.leading, .trailing], 27.5)
             
             VStack {
                 Button(
                     action: {
-                        viewModel.login()
+                        Task {
+                            await viewModel.login(username: viewModel.viewState.username, password: viewModel.viewState.password)
+                        }
                     }
                 ) {
-                    Text("Login")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
+                    HStack {
+                        Text("Login")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        if viewModel.viewState.isLoading {
+                            ProgressView()
+                        }
+                    }.padding()
                         .frame(width: 300, height: 50)
                         .background(Color.green)
                         .cornerRadius(15.0)
                         .shadow(radius: 10.0, x: 20, y: 10)
                 }.padding(.top, 50)
+                    .disabled(viewModel.viewState.isLoading)
                 
                 Button("Create New Account") {
                     
