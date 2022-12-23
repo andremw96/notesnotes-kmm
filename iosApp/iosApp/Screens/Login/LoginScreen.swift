@@ -11,8 +11,14 @@ import shared
 
 struct LoginScreen: View {
     @StateObject private var viewModel = ViewModelProvider().provideLoginViewModel()
+    @State private var isPresentingAlert: Bool = false
     
     var body: some View {
+        let isPresentingAlert = Binding<Bool>(
+            get: { self.viewModel.viewState.isLoginError == true },
+            set: { _ in self.viewModel.viewState.loginError = "" }
+        )
+        
         VStack{
             Text("Noted")
                 .font(.largeTitle)
@@ -82,6 +88,9 @@ struct LoginScreen: View {
             ).edgesIgnoringSafeArea(.all)
         )
         .preferredColorScheme(.dark)
+        .alert(isPresented: isPresentingAlert, content: {
+            Alert(title: Text(viewModel.viewState.loginError))
+        })
     }
 }
 

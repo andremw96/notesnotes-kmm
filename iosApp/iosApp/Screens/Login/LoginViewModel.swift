@@ -42,15 +42,28 @@ import shared
         do {
             let response = try await loginUseCase.invoke(username: username, password: password)
             
-            print("response'nya" + response)
+            if (response is ResourceSuccess) {
+                viewState = LoginViewState(
+                    username: response.data?.user.username ?? username,
+                    password: password,
+                    usernameError: "",
+                    passwordError: "",
+                    isLoading: false
+                )
+            } else {
+                viewState = LoginViewState(
+                    username: username,
+                    password: password,
+                    usernameError: "",
+                    passwordError: "",
+                    isLoading: false,
+                    accessToken: "",
+                    loginError: response.message ?? "something went wrong, please try again",
+                    isLoginSuccess: false
+                )
+            }
             
-            viewState = LoginViewState(
-                username: username,
-                password: password,
-                usernameError: "",
-                passwordError: "",
-                isLoading: false
-            )
+            
         } catch {
             print(error)
             
@@ -59,7 +72,10 @@ import shared
                 password: password,
                 usernameError: "",
                 passwordError: "",
-                isLoading: false
+                isLoading: false,
+                accessToken: "",
+                loginError: error.localizedDescription,
+                isLoginSuccess: false
             )
         }
     }
