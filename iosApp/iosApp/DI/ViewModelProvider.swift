@@ -31,8 +31,9 @@ class ViewModelProvider {
     @MainActor func provideNoteListViewModel() -> NoteListViewModel {
         let logoutUseCase = useCaseProvider.logoutUseCase
         let fetchListNote = useCaseProvider.fetchListNotes
+        let deleteNote = useCaseProvider.deleteNote
         
-        return NoteListViewModel(logoutUseCase: logoutUseCase, fetchListNote: fetchListNote)
+        return NoteListViewModel(logoutUseCase: logoutUseCase, fetchListNote: fetchListNote, deleteNote: deleteNote)
     }
     
 }

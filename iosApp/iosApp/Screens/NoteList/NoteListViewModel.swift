@@ -14,10 +14,12 @@ import shared
     
     private let logoutUseCase: Logout
     private let fetchListNote: FetchListNote
+    private let deleteNote: DeleteNote
     
-    init(logoutUseCase: Logout, fetchListNote: FetchListNote) {
+    init(logoutUseCase: Logout, fetchListNote: FetchListNote, deleteNote: DeleteNote) {
         self.logoutUseCase = logoutUseCase
         self.fetchListNote = fetchListNote
+        self.deleteNote = deleteNote
     }
     
     func logoutFromApps() async {
@@ -56,7 +58,51 @@ import shared
                 viewState = NoteListState()
             }
         } catch {
-            print(error)
+            viewState = NoteListState(
+                isLoading: false,
+                listData: [],
+                error: error.localizedDescription
+            )
+        }
+    }
+    
+    func deleteNoteData(indexSet: IndexSet) async {
+        let latestData = viewState.listData
+        
+        do {
+            let note = latestData[indexSet.first!]
+            let response = try await deleteNote.invoke(noteId: Int32(note.id))
+            
+            if (response is ResourceLoading) {
+                viewState = NoteListState(
+                    isLoading: true,
+                    listData: [],
+                    error: ""
+                )
+            } else if (response is ResourceError) {
+                viewState = NoteListState(
+                    isLoading: false,
+                    listData: latestData,
+                    error: response.message ?? ""
+                )
+            } else if (response is ResourceSuccess) {
+                var newDataState = viewState.listData
+                newDataState.remove(atOffsets: indexSet)
+
+                viewState = NoteListState(
+                    isLoading: false,
+                    listData: newDataState,
+                    error: ""
+                )
+            } else {
+                viewState = NoteListState()
+            }
+        } catch {
+            viewState = NoteListState(
+                isLoading: false,
+                listData: latestData,
+                error: error.localizedDescription
+            )
         }
     }
 }

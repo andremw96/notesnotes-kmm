@@ -35,6 +35,11 @@ struct NoteListScreen: View {
                                     NoteListItem(note: note)
                                 }
                             }
+                            .onDelete { indexSet in
+                                Task {
+                                    await viewModel.deleteNoteData(indexSet: indexSet)
+                                }
+                            }
                         }
                     }
                     .navigationDestination(for: NoteItem.self) { note in
