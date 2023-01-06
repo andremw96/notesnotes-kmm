@@ -24,38 +24,43 @@ struct NoteListScreen: View {
                 ProgressView()
                     .padding()
             } else {
-                List {
-                    Section("Your Notes") {
-                        ForEach(viewModel.viewState.listData) { note in
-                            NavigationLink(value: note) {
-                                NoteListItem(note: note)
+                if viewModel.viewState.listData.isEmpty {
+                    Text("Your Notes is Empty, lets add some notes")
+                        .font(.system(size: 36, weight: .bold))
+                } else {
+                    List {
+                        Section("Your Notes") {
+                            ForEach(viewModel.viewState.listData) { note in
+                                NavigationLink(value: note) {
+                                    NoteListItem(note: note)
+                                }
                             }
                         }
                     }
-                }
-                .navigationBarBackButtonHidden()
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing, content: {
-                        Button("Sign Out") {
-                            Task {
-                                await viewModel.logoutFromApps()
-                                dismiss()
-                            }
-                        }
-                    })
-
-                    ToolbarItem(placement: .navigationBarTrailing, content: {
-                        Button {
-
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                    })
-                }
-                .navigationDestination(for: NoteItem.self) { note in
-                    // go to detail
+                    .navigationDestination(for: NoteItem.self) { note in
+                        // go to detail
+                    }
                 }
             }
+        }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                Button("Sign Out") {
+                    Task {
+                        await viewModel.logoutFromApps()
+                        dismiss()
+                    }
+                }
+            })
+
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                Button {
+
+                } label: {
+                    Image(systemName: "plus")
+                }
+            })
         }
         .alert(isPresented: isPresentingAlert, content: {
             Alert(title: Text(viewModel.viewState.error), dismissButton: .destructive(Text("Logout")) {
