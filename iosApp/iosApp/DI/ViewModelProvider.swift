@@ -22,8 +22,10 @@ class ViewModelProvider {
     @MainActor func provideLoginViewModel() -> LoginViewModel {
         let loginDataValidator = useCaseProvider.loginDataValidator
         let loginUsecase = useCaseProvider.loginUseCase
+        let saveCredential = useCaseProvider.saveCredential
+        let getCredential = useCaseProvider.getCredential
         
-        return LoginViewModel(loginDataValidator: loginDataValidator, loginUseCase: loginUsecase)
+        return LoginViewModel(loginDataValidator: loginDataValidator, loginUseCase: loginUsecase, saveCredential: saveCredential, getCredential: getCredential)
     }
     
 }

@@ -15,10 +15,14 @@ import shared
     
     private let loginDataValidator: LoginDataValidator
     private let loginUseCase: Login
+    private let saveCredential: SaveCredential
+    private let getCredential: GetCredential
     
-    init(loginDataValidator: LoginDataValidator, loginUseCase: Login) {
+    init(loginDataValidator: LoginDataValidator, loginUseCase: Login, saveCredential: SaveCredential, getCredential: GetCredential) {
         self.loginDataValidator = loginDataValidator
         self.loginUseCase = loginUseCase
+        self.saveCredential = saveCredential
+        self.getCredential = getCredential
     }
     
     func validateUsernamePassword(username: String, password: String) {
@@ -30,7 +34,18 @@ import shared
         )
     }
     
-    func login(username: String, password: String) async -> Void {
+    func checkLogin(onAlreadyLogin: () -> Void) async {
+        do {
+            let credential = try await getCredential.invoke()
+            if (credential.accessToken != "" && credential.username != "" && credential.userid != -1) {
+                onAlreadyLogin()
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func login(username: String, password: String, onLoginSuccess: () -> Void) async -> Void {
         viewState = LoginViewState(
             username: username,
             password: password,
@@ -48,8 +63,16 @@ import shared
                     password: password,
                     usernameError: "",
                     passwordError: "",
-                    isLoading: false
+                    isLoading: false,
+                    accessToken: response.data?.accessToken ?? "",
+                    loginError: "",
+                    isLoginSuccess: true
                 )
+                
+                if response.data != nil {
+                    try await saveCredential.invoke(username: username, token: response.data!.accessToken, userId: (response.data?.user.userId)!)
+                    onLoginSuccess()
+                }
             } else {
                 viewState = LoginViewState(
                     username: username,
@@ -62,8 +85,6 @@ import shared
                     isLoginSuccess: false
                 )
             }
-            
-            
         } catch {
             print(error)
             
