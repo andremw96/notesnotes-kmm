@@ -91,7 +91,6 @@ struct LoginScreen: View {
                     ), startPoint: .top, endPoint: .bottom
                 ).edgesIgnoringSafeArea(.all)
             )
-            .preferredColorScheme(.dark)
             .alert(isPresented: isPresentingAlert, content: {
                 Alert(title: Text(viewModel.viewState.loginError))
             })

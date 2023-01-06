@@ -28,4 +28,11 @@ class ViewModelProvider {
         return LoginViewModel(loginDataValidator: loginDataValidator, loginUseCase: loginUsecase, saveCredential: saveCredential, getCredential: getCredential)
     }
     
+    @MainActor func provideNoteListViewModel() -> NoteListViewModel {
+        let logoutUseCase = useCaseProvider.logoutUseCase
+        let fetchListNote = useCaseProvider.fetchListNotes
+        
+        return NoteListViewModel(logoutUseCase: logoutUseCase, fetchListNote: fetchListNote)
+    }
+    
 }
