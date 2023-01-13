@@ -36,4 +36,8 @@ class ViewModelProvider {
         return NoteListViewModel(logoutUseCase: logoutUseCase, fetchListNote: fetchListNote, deleteNote: deleteNote)
     }
     
+    @MainActor func provideAddEditNoteViewModel() -> AddEditNoteViewModel {
+        return AddEditNoteViewModel()
+    }
+    
 }

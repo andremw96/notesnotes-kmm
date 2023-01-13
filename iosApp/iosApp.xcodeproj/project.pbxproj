@@ -17,6 +17,8 @@
 		7C345BA9294C4DAE00486273 /* TextFieldWithPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BA8294C4DAE00486273 /* TextFieldWithPromptView.swift */; };
 		7C345BAB294C522F00486273 /* LoginViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BAA294C522E00486273 /* LoginViewState.swift */; };
 		7C69D4C729712B4500907BB6 /* AddEditNoteScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */; };
+		7C69D4C929713FCA00907BB6 /* AddEditNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4C829713FCA00907BB6 /* AddEditNoteViewModel.swift */; };
+		7C69D4CB29713FF500907BB6 /* AddEditNoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4CA29713FF400907BB6 /* AddEditNoteState.swift */; };
 		7C7B04662967A0BB00A5F2D3 /* NoteListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B04652967A0BB00A5F2D3 /* NoteListScreen.swift */; };
 		7C7B04682967D2A300A5F2D3 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B04672967D2A300A5F2D3 /* Route.swift */; };
 		7C7B046A2967E94D00A5F2D3 /* NoteListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B04692967E94D00A5F2D3 /* NoteListViewModel.swift */; };
@@ -53,6 +55,8 @@
 		7C345BA8294C4DAE00486273 /* TextFieldWithPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithPromptView.swift; sourceTree = "<group>"; };
 		7C345BAA294C522E00486273 /* LoginViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewState.swift; sourceTree = "<group>"; };
 		7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteScreen.swift; sourceTree = "<group>"; };
+		7C69D4C829713FCA00907BB6 /* AddEditNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteViewModel.swift; sourceTree = "<group>"; };
+		7C69D4CA29713FF400907BB6 /* AddEditNoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteState.swift; sourceTree = "<group>"; };
 		7C7B04652967A0BB00A5F2D3 /* NoteListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListScreen.swift; sourceTree = "<group>"; };
 		7C7B04672967D2A300A5F2D3 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		7C7B04692967E94D00A5F2D3 /* NoteListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewModel.swift; sourceTree = "<group>"; };
@@ -156,6 +160,8 @@
 			isa = PBXGroup;
 			children = (
 				7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */,
+				7C69D4C829713FCA00907BB6 /* AddEditNoteViewModel.swift */,
+				7C69D4CA29713FF400907BB6 /* AddEditNoteState.swift */,
 			);
 			path = AddEditNote;
 			sourceTree = "<group>";
@@ -283,6 +289,7 @@
 				7C7B04712968100B00A5F2D3 /* NoteListItem.swift in Sources */,
 				7C345BA9294C4DAE00486273 /* TextFieldWithPromptView.swift in Sources */,
 				7CB7120C29554EE100A27890 /* ViewModelProvider.swift in Sources */,
+				7C69D4C929713FCA00907BB6 /* AddEditNoteViewModel.swift in Sources */,
 				7C7B04682967D2A300A5F2D3 /* Route.swift in Sources */,
 				7C345BAB294C522F00486273 /* LoginViewState.swift in Sources */,
 				7C1B52522930A5CC00DA1CEE /* ContentView.swift in Sources */,
@@ -294,6 +301,7 @@
 				7C7B046A2967E94D00A5F2D3 /* NoteListViewModel.swift in Sources */,
 				7C7B046F2967F70600A5F2D3 /* NoteItem.swift in Sources */,
 				7C345BA7294C3FAE00486273 /* LoginViewModel.swift in Sources */,
+				7C69D4CB29713FF500907BB6 /* AddEditNoteState.swift in Sources */,
 				7CB712102955508100A27890 /* UseCaseProvider.swift in Sources */,
 				7C345BA4294C267000486273 /* PasswordView.swift in Sources */,
 			);
