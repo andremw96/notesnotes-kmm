@@ -260,7 +260,7 @@ fun ListNoteListItem(
                 )
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
                 val date = LocalDate.parse(note.updatedAt, formatter)
-                val dateFormatted = SimpleDateFormat("dd/MM/yyyy").format(
+                val dateFormatted = SimpleDateFormat("E, d MMM yyyy HH:mm").format(
                     Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
                 )
 
