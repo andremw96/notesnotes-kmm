@@ -32,7 +32,7 @@ struct AddEditNoteScreen: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(lineWidth: 2)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(Color("TextFieldOutlineColor"))
             )
            
             
@@ -40,6 +40,15 @@ struct AddEditNoteScreen: View {
         }
         .padding()
         .navigationTitle(isEditing ? "Edit \(note!.title)" : "Add New Note")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                Button(action: {
+                    
+                }, label: {
+                    Image(systemName: "tray.and.arrow.down.fill")
+                })
+            })
+        }
         .onAppear {
             viewModel.viewState.noteItem = note ?? NoteItem(createdAt: "", description: "", id: -1, isDeleted: false, title: "", updatedAt: "", userId: -1)
         }

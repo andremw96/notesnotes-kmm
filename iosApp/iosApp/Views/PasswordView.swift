@@ -47,7 +47,7 @@ struct PasswordView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(lineWidth: 2)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(Color("TextFieldOutlineColor"))
             )
             
             Text(prompt)
