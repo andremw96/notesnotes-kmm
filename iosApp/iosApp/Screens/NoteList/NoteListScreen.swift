@@ -15,8 +15,11 @@ struct NoteListScreen: View {
     
     var body: some View {
         let isPresentingAlert = Binding<Bool>(
-            get: { self.viewModel.viewState.error != "" },
-            set: { _ in self.viewModel.viewState.error = "" }
+            get: { self.viewModel.viewState.error != "" || self.viewModel.viewState.authenticationError != "" },
+            set: { _ in
+                self.viewModel.viewState.error = ""
+                self.viewModel.viewState.authenticationError = ""
+            }
         )
         
         ZStack {
@@ -44,6 +47,15 @@ struct NoteListScreen: View {
                     }
                     .navigationDestination(for: NoteItem.self) { note in
                         // go to detail
+                        AddEditNoteScreen(
+                            isEditing: true, 
+                            note: note
+                        )
+                    }
+                    .refreshable {
+                        Task {
+                            await viewModel.fetchData()
+                        }
                     }
                 }
             }
@@ -60,17 +72,21 @@ struct NoteListScreen: View {
             })
 
             ToolbarItem(placement: .navigationBarTrailing, content: {
-                Button {
-
-                } label: {
+                NavigationLink(destination: AddEditNoteScreen(isEditing: false)) {
                     Image(systemName: "plus")
                 }
+                
             })
         }
         .alert(isPresented: isPresentingAlert, content: {
-            Alert(title: Text(viewModel.viewState.error), dismissButton: .destructive(Text("Logout")) {
+            let errorTitle = viewModel.viewState.error != "" ? viewModel.viewState.error : viewModel.viewState.authenticationError
+            let buttonText = viewModel.viewState.error != "" ? "OK" : "Logout"
+            
+            return Alert(title: Text(errorTitle), dismissButton: .destructive(Text(buttonText)) {
                 Task {
-                    await viewModel.logoutFromApps()
+                    if viewModel.viewState.authenticationError != "" {
+                        await viewModel.logoutFromApps()
+                    }
                     dismiss()
                 }
             })

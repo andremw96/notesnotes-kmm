@@ -12,4 +12,5 @@ struct NoteListState {
     var isLoading = false
     var listData: [NoteItem] = []
     var error = ""
+    var authenticationError = ""
 }

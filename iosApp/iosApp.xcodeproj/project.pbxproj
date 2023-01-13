@@ -16,6 +16,7 @@
 		7C345BA7294C3FAE00486273 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BA6294C3FAE00486273 /* LoginViewModel.swift */; };
 		7C345BA9294C4DAE00486273 /* TextFieldWithPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BA8294C4DAE00486273 /* TextFieldWithPromptView.swift */; };
 		7C345BAB294C522F00486273 /* LoginViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BAA294C522E00486273 /* LoginViewState.swift */; };
+		7C69D4C729712B4500907BB6 /* AddEditNoteScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */; };
 		7C7B04662967A0BB00A5F2D3 /* NoteListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B04652967A0BB00A5F2D3 /* NoteListScreen.swift */; };
 		7C7B04682967D2A300A5F2D3 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B04672967D2A300A5F2D3 /* Route.swift */; };
 		7C7B046A2967E94D00A5F2D3 /* NoteListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B04692967E94D00A5F2D3 /* NoteListViewModel.swift */; };
@@ -51,6 +52,7 @@
 		7C345BA6294C3FAE00486273 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		7C345BA8294C4DAE00486273 /* TextFieldWithPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithPromptView.swift; sourceTree = "<group>"; };
 		7C345BAA294C522E00486273 /* LoginViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewState.swift; sourceTree = "<group>"; };
+		7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteScreen.swift; sourceTree = "<group>"; };
 		7C7B04652967A0BB00A5F2D3 /* NoteListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListScreen.swift; sourceTree = "<group>"; };
 		7C7B04672967D2A300A5F2D3 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		7C7B04692967E94D00A5F2D3 /* NoteListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewModel.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		7C345B9D294C1A0B00486273 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				7C69D4C529712AE000907BB6 /* AddEditNote */,
 				7C7B04642967A0A700A5F2D3 /* NoteList */,
 				7C345BA5294C30A500486273 /* Login */,
 				7C7B04672967D2A300A5F2D3 /* Route.swift */,
@@ -147,6 +150,14 @@
 				7C345BAA294C522E00486273 /* LoginViewState.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		7C69D4C529712AE000907BB6 /* AddEditNote */ = {
+			isa = PBXGroup;
+			children = (
+				7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */,
+			);
+			path = AddEditNote;
 			sourceTree = "<group>";
 		};
 		7C7B04642967A0A700A5F2D3 /* NoteList */ = {
@@ -276,6 +287,7 @@
 				7C345BAB294C522F00486273 /* LoginViewState.swift in Sources */,
 				7C1B52522930A5CC00DA1CEE /* ContentView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				7C69D4C729712B4500907BB6 /* AddEditNoteScreen.swift in Sources */,
 				7C7B04662967A0BB00A5F2D3 /* NoteListScreen.swift in Sources */,
 				7C345B9F294C1A1E00486273 /* LoginScreen.swift in Sources */,
 				7C7B046C2967F65300A5F2D3 /* NoteListState.swift in Sources */,

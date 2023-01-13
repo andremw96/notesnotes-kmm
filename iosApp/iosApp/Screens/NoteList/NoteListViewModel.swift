@@ -38,21 +38,35 @@ import shared
                 viewState = NoteListState(
                     isLoading: true,
                     listData: [],
-                    error: ""
+                    error: "",
+                    authenticationError: ""
                 )
             } else if (response is ResourceError) {
-                viewState = NoteListState(
-                    isLoading: false,
-                    listData: [],
-                    error: response.message ?? ""
-                )
+                let responseMessage = response.message ?? ""
+                
+                if responseMessage.contains("Unauthorized") {
+                    viewState = NoteListState(
+                        isLoading: false,
+                        listData: [],
+                        error: "",
+                        authenticationError: response.message ?? ""
+                    )
+                } else {
+                    viewState = NoteListState(
+                        isLoading: false,
+                        listData: [],
+                        error: response.message ?? "",
+                        authenticationError: ""
+                    )
+                }
             } else if (response is ResourceSuccess) {
                 viewState = NoteListState(
                     isLoading: false,
                     listData: response.data!.map { schema in
                         listNoteSchemaToItem(schema: schema as! ListNoteSchema)
                     },
-                    error: ""
+                    error: "",
+                    authenticationError: ""
                 )
             } else {
                 viewState = NoteListState()
@@ -61,7 +75,8 @@ import shared
             viewState = NoteListState(
                 isLoading: false,
                 listData: [],
-                error: error.localizedDescription
+                error: error.localizedDescription,
+                authenticationError: ""
             )
         }
     }
@@ -77,14 +92,27 @@ import shared
                 viewState = NoteListState(
                     isLoading: true,
                     listData: [],
-                    error: ""
+                    error: "",
+                    authenticationError: ""
                 )
             } else if (response is ResourceError) {
-                viewState = NoteListState(
-                    isLoading: false,
-                    listData: latestData,
-                    error: response.message ?? ""
-                )
+                let responseMessage = response.message ?? ""
+                
+                if responseMessage.contains("Unauthorized") {
+                    viewState = NoteListState(
+                        isLoading: false,
+                        listData: [],
+                        error: "",
+                        authenticationError: response.message ?? ""
+                    )
+                } else {
+                    viewState = NoteListState(
+                        isLoading: false,
+                        listData: [],
+                        error: response.message ?? "",
+                        authenticationError: ""
+                    )
+                }
             } else if (response is ResourceSuccess) {
                 var newDataState = viewState.listData
                 newDataState.remove(atOffsets: indexSet)
@@ -92,7 +120,8 @@ import shared
                 viewState = NoteListState(
                     isLoading: false,
                     listData: newDataState,
-                    error: ""
+                    error: "",
+                    authenticationError: ""
                 )
             } else {
                 viewState = NoteListState()
@@ -101,7 +130,8 @@ import shared
             viewState = NoteListState(
                 isLoading: false,
                 listData: latestData,
-                error: error.localizedDescription
+                error: error.localizedDescription,
+                authenticationError: ""
             )
         }
     }
