@@ -11,6 +11,9 @@ import Foundation
 struct AddEditNoteState {
     var isLoading = false
     var noteItem: NoteItem = NoteItem(createdAt: "", description: "", id: -1, isDeleted: false, title: "", updatedAt: "", userId: -1)
-    var error = ""
-    var authenticationError = ""
+    var titleError = ""
+    var descriptionError = ""
+    var isEditing = false
+    var saveNoteSuccess = false
+    var saveNoteError = ""
 }

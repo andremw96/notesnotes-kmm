@@ -53,6 +53,7 @@ struct PasswordView: View {
             Text(prompt)
                 .fixedSize(horizontal: false, vertical: true)
                 .font(.caption)
+                .foregroundColor(Color.red)
         }
     }
 }

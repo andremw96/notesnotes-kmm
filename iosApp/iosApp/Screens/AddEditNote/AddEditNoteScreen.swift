@@ -20,13 +20,27 @@ struct AddEditNoteScreen: View {
                 sfSymbolName: "",
                 placeholder: "Title",
                 text: $viewModel.viewState.noteItem.title,
-                prompt: ""
-            ).autocapitalization(.none)
+                prompt: viewModel.viewState.titleError
+            )
+            .onChange(of: viewModel.viewState.noteItem.title, perform: { char in
+                viewModel.validateTitleDescription(title: char, description: viewModel.viewState.noteItem.description)
+            })
+            .autocapitalization(.none)
             
             Text("Description")
 
             ZStack {
-                TextEditor(text: $viewModel.viewState.noteItem.description)
+                VStack {
+                    TextEditor(text: $viewModel.viewState.noteItem.description)
+                        .onChange(of: viewModel.viewState.noteItem.description, perform: { char in
+                            viewModel.validateTitleDescription(title: viewModel.viewState.noteItem.title, description: char)
+                        })
+                    
+                    Text(viewModel.viewState.descriptionError)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.caption)
+                        .foregroundColor(Color.red)
+                }
             }
             .padding()
             .overlay(

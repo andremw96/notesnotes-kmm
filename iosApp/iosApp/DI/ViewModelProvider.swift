@@ -37,7 +37,11 @@ class ViewModelProvider {
     }
     
     @MainActor func provideAddEditNoteViewModel() -> AddEditNoteViewModel {
-        return AddEditNoteViewModel()
+        let addEditNoteDataValidator = useCaseProvider.addEditNoteDataValidator
+        let saveNewNote = useCaseProvider.saveNewNote
+        let updateNote = useCaseProvider.updateNote
+        
+        return AddEditNoteViewModel(addEditNoteDataValidator: addEditNoteDataValidator, saveNewNote: saveNewNote, updateNote: updateNote)
     }
     
 }

@@ -39,7 +39,7 @@ class NotesNotesServiceImpl(
             )
         }
     }
-    private val API_URL = "http://192.168.100.4:8080"
+    private val API_URL = "http://192.168.100.6:8080"
 
     override suspend fun login(username: String, password: String): HttpResponse {
         val url = "$API_URL/user/login"
