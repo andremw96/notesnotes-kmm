@@ -16,4 +16,17 @@ struct AddEditNoteState {
     var isEditing = false
     var saveNoteSuccess = false
     var saveNoteError = ""
+    var authenticationError = ""
+    
+    var isDataValid: Bool {
+        get { return titleError == "" && descriptionError == "" && saveNoteError == "" }
+    }
+    
+    var isSaveError: Bool {
+        get { return saveNoteError != "" || saveNoteSuccess == false }
+    }
+    
+    var isAuthError: Bool {
+        get { return authenticationError != "" }
+    }
 }

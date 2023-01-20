@@ -40,8 +40,9 @@ class ViewModelProvider {
         let addEditNoteDataValidator = useCaseProvider.addEditNoteDataValidator
         let saveNewNote = useCaseProvider.saveNewNote
         let updateNote = useCaseProvider.updateNote
+        let logoutUseCase = useCaseProvider.logoutUseCase
         
-        return AddEditNoteViewModel(addEditNoteDataValidator: addEditNoteDataValidator, saveNewNote: saveNewNote, updateNote: updateNote)
+        return AddEditNoteViewModel(logoutUseCase: logoutUseCase, addEditNoteDataValidator: addEditNoteDataValidator, saveNewNote: saveNewNote, updateNote: updateNote)
     }
     
 }

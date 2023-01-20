@@ -30,6 +30,24 @@ import shared
         }
     }
     
+    private func handleResponseError(responseMessage: String) -> NoteListState {
+        if (responseMessage.contains("Unauthorized")) {
+            return NoteListState(
+                isLoading: false,
+                listData: viewState.listData,
+                error: "",
+                authenticationError: responseMessage
+            )
+        } else {
+            return NoteListState(
+                isLoading: false,
+                listData: viewState.listData,
+                error: responseMessage,
+                authenticationError: ""
+            )
+        }
+    }
+    
     func fetchData() async {
         do {
             let response = try await fetchListNote.invoke()
@@ -44,21 +62,7 @@ import shared
             } else if (response is ResourceError) {
                 let responseMessage = response.message ?? ""
                 
-                if responseMessage.contains("Unauthorized") {
-                    viewState = NoteListState(
-                        isLoading: false,
-                        listData: [],
-                        error: "",
-                        authenticationError: response.message ?? ""
-                    )
-                } else {
-                    viewState = NoteListState(
-                        isLoading: false,
-                        listData: [],
-                        error: response.message ?? "",
-                        authenticationError: ""
-                    )
-                }
+                viewState = handleResponseError(responseMessage: responseMessage)
             } else if (response is ResourceSuccess) {
                 viewState = NoteListState(
                     isLoading: false,
@@ -74,7 +78,7 @@ import shared
         } catch {
             viewState = NoteListState(
                 isLoading: false,
-                listData: [],
+                listData: viewState.listData,
                 error: error.localizedDescription,
                 authenticationError: ""
             )
@@ -98,21 +102,7 @@ import shared
             } else if (response is ResourceError) {
                 let responseMessage = response.message ?? ""
                 
-                if responseMessage.contains("Unauthorized") {
-                    viewState = NoteListState(
-                        isLoading: false,
-                        listData: [],
-                        error: "",
-                        authenticationError: response.message ?? ""
-                    )
-                } else {
-                    viewState = NoteListState(
-                        isLoading: false,
-                        listData: [],
-                        error: response.message ?? "",
-                        authenticationError: ""
-                    )
-                }
+                viewState = handleResponseError(responseMessage: responseMessage)
             } else if (response is ResourceSuccess) {
                 var newDataState = viewState.listData
                 newDataState.remove(atOffsets: indexSet)

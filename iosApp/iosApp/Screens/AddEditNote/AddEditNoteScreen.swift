@@ -11,10 +11,24 @@ import SwiftUI
 struct AddEditNoteScreen: View {
     @StateObject private var viewModel = ViewModelProvider().provideAddEditNoteViewModel()
     
+    @Environment(\.presentationMode) var presentationMode
+    
+    @Environment(\.dismiss) private var dismiss
+    
     var isEditing: Bool
     var note: NoteItem?
     
     var body: some View {
+        let isPresentingAlertSaveError = Binding<Bool>(
+            get: { self.viewModel.viewState.isSaveError == true },
+            set: { _ in self.viewModel.viewState.saveNoteError = "" }
+        )
+        
+        let isPresentingAlertAuthError = Binding<Bool>(
+            get: { self.viewModel.viewState.isAuthError == true },
+            set: { _ in self.viewModel.viewState.authenticationError = "" }
+        )
+        
         VStack(alignment: .leading) {
             TextFieldWithPromptView(
                 sfSymbolName: "",
@@ -57,6 +71,18 @@ struct AddEditNoteScreen: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing, content: {
                 Button(action: {
+                    Task {
+                        if isEditing {
+                            await viewModel.updateNoteWith(noteId: viewModel.viewState.noteItem.id, title: viewModel.viewState.noteItem.title, description: viewModel.viewState.noteItem.description
+                            ) {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                        } else {
+                            await viewModel.saveNote(title: viewModel.viewState.noteItem.title, description: viewModel.viewState.noteItem.description) {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
                     
                 }, label: {
                     Image(systemName: "tray.and.arrow.down.fill")
@@ -66,6 +92,17 @@ struct AddEditNoteScreen: View {
         .onAppear {
             viewModel.viewState.noteItem = note ?? NoteItem(createdAt: "", description: "", id: -1, isDeleted: false, title: "", updatedAt: "", userId: -1)
         }
+        .alert(isPresented: isPresentingAlertSaveError, content: {
+            Alert(title: Text(viewModel.viewState.saveNoteError))
+        })
+        .alert(isPresented: isPresentingAlertAuthError, content: {
+            return Alert(title: Text(viewModel.viewState.authenticationError), dismissButton: .destructive(Text("Logout")) {
+                Task {
+                    await viewModel.logoutFromApps()
+                    dismiss()
+                }
+            })
+        })
     }
 }
 

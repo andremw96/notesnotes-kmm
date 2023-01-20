@@ -14,10 +14,16 @@ struct NoteListScreen: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        let isPresentingAlert = Binding<Bool>(
-            get: { self.viewModel.viewState.error != "" || self.viewModel.viewState.authenticationError != "" },
+        let isPresentingAlertError = Binding<Bool>(
+            get: { self.viewModel.viewState.error != "" },
             set: { _ in
                 self.viewModel.viewState.error = ""
+            }
+        )
+        
+        let isPresentingAlertAuthError = Binding<Bool>(
+            get: { self.viewModel.viewState.authenticationError != "" },
+            set: { _ in
                 self.viewModel.viewState.authenticationError = ""
             }
         )
@@ -28,8 +34,19 @@ struct NoteListScreen: View {
                     .padding()
             } else {
                 if viewModel.viewState.listData.isEmpty {
-                    Text("Your Notes is Empty, lets add some notes")
-                        .font(.system(size: 36, weight: .bold))
+                    VStack {
+                        Text("Your Notes is Empty, lets add some notes")
+                            .font(.system(size: 36, weight: .bold))
+                        
+                        Button(action: {
+                            Task {
+                                await viewModel.fetchData()
+                            }
+                        }, label: {
+                            Text("Refresh")
+                        })
+                    }
+                    
                 } else {
                     List {
                         Section("Your Notes") {
@@ -78,15 +95,15 @@ struct NoteListScreen: View {
                 
             })
         }
-        .alert(isPresented: isPresentingAlert, content: {
-            let errorTitle = viewModel.viewState.error != "" ? viewModel.viewState.error : viewModel.viewState.authenticationError
-            let buttonText = viewModel.viewState.error != "" ? "OK" : "Logout"
-            
-            return Alert(title: Text(errorTitle), dismissButton: .destructive(Text(buttonText)) {
+        .alert(isPresented: isPresentingAlertError, content: {
+            return Alert(title: Text(viewModel.viewState.error), dismissButton: .destructive(Text("OK")) {
+                dismiss()
+            })
+        })
+        .alert(isPresented: isPresentingAlertAuthError, content: {
+            return Alert(title: Text(viewModel.viewState.authenticationError), dismissButton: .destructive(Text("Logout")) {
                 Task {
-                    if viewModel.viewState.authenticationError != "" {
-                        await viewModel.logoutFromApps()
-                    }
+                    await viewModel.logoutFromApps()
                     dismiss()
                 }
             })
