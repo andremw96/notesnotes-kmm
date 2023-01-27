@@ -35,7 +35,8 @@ struct NoteListScreen: View {
             } else {
                 if viewModel.viewState.listData.isEmpty {
                     VStack {
-                        Text("Your Notes is Empty, lets add some notes")
+                        Text(viewModel.viewState.error != "" ? "Something went wrong, please refresh" : "Your Notes is Empty, lets add some notes")
+                            .multilineTextAlignment(.center)
                             .font(.system(size: 36, weight: .bold))
                         
                         Button(action: {
@@ -46,7 +47,6 @@ struct NoteListScreen: View {
                             Text("Refresh")
                         })
                     }
-                    
                 } else {
                     List {
                         Section("Your Notes") {
@@ -77,6 +77,11 @@ struct NoteListScreen: View {
                 }
             }
         }
+        .onAppear {
+            Task {
+                await viewModel.fetchData()
+            }
+        }
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing, content: {
@@ -95,24 +100,23 @@ struct NoteListScreen: View {
                 
             })
         }
-        .alert(isPresented: isPresentingAlertError, content: {
-            return Alert(title: Text(viewModel.viewState.error), dismissButton: .destructive(Text("OK")) {
-                dismiss()
-            })
+        .overlay(content: {
+            EmptyView()
+                .alert(isPresented: isPresentingAlertError, content: {
+                    return Alert(title: Text(viewModel.viewState.error), dismissButton: .destructive(Text("OK")))
+                })
         })
-        .alert(isPresented: isPresentingAlertAuthError, content: {
-            return Alert(title: Text(viewModel.viewState.authenticationError), dismissButton: .destructive(Text("Logout")) {
-                Task {
-                    await viewModel.logoutFromApps()
-                    dismiss()
-                }
-            })
+        .overlay(content: {
+            EmptyView()
+                .alert(isPresented: isPresentingAlertAuthError, content: {
+                    return Alert(title: Text(viewModel.viewState.authenticationError), dismissButton: .destructive(Text("Logout")) {
+                        Task {
+                            await viewModel.logoutFromApps()
+                            dismiss()
+                        }
+                    })
+                })
         })
-        .onAppear {
-            Task {
-                await viewModel.fetchData()
-            }
-        }
     }
 }
 

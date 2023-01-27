@@ -70,38 +70,48 @@ struct AddEditNoteScreen: View {
         .navigationTitle(isEditing ? "Edit \(note!.title)" : "Add New Note")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing, content: {
-                Button(action: {
-                    Task {
-                        if isEditing {
-                            await viewModel.updateNoteWith(noteId: viewModel.viewState.noteItem.id, title: viewModel.viewState.noteItem.title, description: viewModel.viewState.noteItem.description
-                            ) {
-                                self.presentationMode.wrappedValue.dismiss()
-                            }
-                        } else {
-                            await viewModel.saveNote(title: viewModel.viewState.noteItem.title, description: viewModel.viewState.noteItem.description) {
-                                self.presentationMode.wrappedValue.dismiss()
+                if (viewModel.viewState.isLoading) {
+                    ProgressView()
+                } else {
+                    Button(action: {
+                        Task {
+                            if isEditing {
+                                await viewModel.updateNoteWith(noteId: viewModel.viewState.noteItem.id, title: viewModel.viewState.noteItem.title, description: viewModel.viewState.noteItem.description
+                                ) {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                }
+                            } else {
+                                await viewModel.saveNote(title: viewModel.viewState.noteItem.title, description: viewModel.viewState.noteItem.description) {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                }
                             }
                         }
-                    }
-                    
-                }, label: {
-                    Image(systemName: "tray.and.arrow.down.fill")
-                })
+                        
+                    }, label: {
+                        Image(systemName: "tray.and.arrow.down.fill")
+                    })
+                }
             })
         }
         .onAppear {
             viewModel.viewState.noteItem = note ?? NoteItem(createdAt: "", description: "", id: -1, isDeleted: false, title: "", updatedAt: "", userId: -1)
         }
-        .alert(isPresented: isPresentingAlertSaveError, content: {
-            Alert(title: Text(viewModel.viewState.saveNoteError))
+        .overlay(content: {
+            EmptyView()
+                .alert(isPresented: isPresentingAlertSaveError, content: {
+                    return Alert(title: Text(viewModel.viewState.saveNoteError), dismissButton: .destructive(Text("OK")))
+                })
         })
-        .alert(isPresented: isPresentingAlertAuthError, content: {
-            return Alert(title: Text(viewModel.viewState.authenticationError), dismissButton: .destructive(Text("Logout")) {
-                Task {
-                    await viewModel.logoutFromApps()
-                    dismiss()
-                }
-            })
+        .overlay(content: {
+            EmptyView()
+                .alert(isPresented: isPresentingAlertAuthError, content: {
+                    return Alert(title: Text(viewModel.viewState.authenticationError), dismissButton: .destructive(Text("Logout")) {
+                        Task {
+                            await viewModel.logoutFromApps()
+                            dismiss()
+                        }
+                    })
+                })
         })
     }
 }
