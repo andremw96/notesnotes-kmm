@@ -5,6 +5,7 @@
 
     <application
         android:name=".NotesNotesApplication"
+        android:label="Noted"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
