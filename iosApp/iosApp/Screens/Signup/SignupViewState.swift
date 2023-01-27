@@ -21,4 +21,8 @@ struct SignupViewState {
     var accessToken = ""
     var buttonError = ""
     var isLoginSuccess = false
+    
+    var isDataValid: Bool {
+        get { return username != "" && usernameError == "" && password != "" && passwordError == "" && email != "" && emailError == "" && confirmationPassword != "" && confirmationPasswordError == "" }
+    }
 }

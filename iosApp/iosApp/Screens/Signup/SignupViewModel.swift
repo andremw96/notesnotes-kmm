@@ -23,4 +23,44 @@ import shared
         self.loginUseCase = loginUseCase
         self.saveCredential = saveCredential
     }
+    
+    func signupDataChanged(email: String, username: String, password: String, confirmationPassword: String) {
+        viewState = SignupViewState(
+            email: email,
+            username: username,
+            password: password,
+            confirmationPassword: confirmationPassword,
+            usernameError: (signupDataValidator.checkUsername(username: username) as? SignupDataValidator.SignupValidatorResultError)?.message ?? "",
+            passwordError: (signupDataValidator.checkPassword(password: password) as? SignupDataValidator.SignupValidatorResultError)?.message ?? "", emailError: (signupDataValidator.checkEmail(email: email) as? SignupDataValidator.SignupValidatorResultError)?.message ?? "",
+            confirmationPasswordError: (signupDataValidator.checkConfirmationPassword(password: password, confirmationPassword: confirmationPassword) as? SignupDataValidator.SignupValidatorResultError)?.message ?? ""
+        )
+    }
+    
+    func signup(email: String, username: String, password: String, confirmationPassword: String, onSignupSuccess: () -> Void) async -> Void {
+        viewState = SignupViewState(
+            email: email,
+            username: username,
+            password: password,
+            confirmationPassword: confirmationPassword,
+            usernameError: "",
+            passwordError: "",
+            emailError: "",
+            confirmationPasswordError: "",
+            isLoading: true
+        )
+        
+        do {
+            let response = try await signupUseCase.invoke(email: email, username: username, password: password)
+            
+            if (response is ResourceSuccess) {
+                
+            } else {
+                
+            }
+        } catch {
+            print(error)
+            
+            
+        }
+    }
 }
