@@ -65,7 +65,17 @@ struct SignupScreen: View {
             VStack {
                 Button(
                     action: {
-                        
+                        Task {
+                            await viewModel.signup(
+                                email: viewModel.viewState.email,
+                                username: viewModel.viewState.username,
+                                password: viewModel.viewState.password,
+                                confirmationPassword: viewModel.viewState.confirmationPassword
+                            ) {
+                                // go to note list
+                                
+                            }
+                        }
                     }
                 ) {
                     HStack {

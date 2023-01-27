@@ -19,7 +19,7 @@ struct SignupViewState {
     var confirmationPasswordError = ""
     var isLoading = false
     var accessToken = ""
-    var buttonError = ""
+    var signupError = ""
     var isLoginSuccess = false
     
     var isDataValid: Bool {

@@ -49,18 +49,100 @@ import shared
             isLoading: true
         )
         
-        do {
-            let response = try await signupUseCase.invoke(email: email, username: username, password: password)
-            
-            if (response is ResourceSuccess) {
+        if (viewState.isDataValid) {
+            do {
+                let response = try await signupUseCase.invoke(email: email, username: username, password: password)
+                    
+                if (response is ResourceSuccess) {
+                    viewState = SignupViewState(
+                        email: email,
+                        username: username,
+                        password: password,
+                        confirmationPassword: confirmationPassword,
+                        usernameError: "",
+                        passwordError: "",
+                        emailError: "",
+                        confirmationPasswordError: "",
+                        isLoading: false,
+                        signupError: ""
+                    )
+                    
+                    viewState = SignupViewState(
+                        email: email,
+                        username: username,
+                        password: password,
+                        isLoading: true,
+                        isLoginSuccess: false
+                    )
+                    
+                    let login = try await loginUseCase.invoke(username: username, password: password)
+                    
+                    if (login is ResourceSuccess) {
+                        viewState = SignupViewState(
+                            email: email,
+                            username: username,
+                            password: password,
+                            confirmationPassword: confirmationPassword,
+                            usernameError: "",
+                            passwordError: "",
+                            emailError: "",
+                            confirmationPasswordError: "",
+                            isLoading: false,
+                            signupError: "",
+                            isLoginSuccess: true
+                        )
+                        
+                        if login.data != nil {
+                            try await saveCredential.invoke(username: username, token: login.data!.accessToken, userId: (login.data?.user.userId)!)
+                            onSignupSuccess()
+                        }
+                    } else {
+                        viewState = SignupViewState(
+                            email: email,
+                            username: username,
+                            password: password,
+                            confirmationPassword: confirmationPassword,
+                            usernameError: "",
+                            passwordError: "",
+                            emailError: "",
+                            confirmationPasswordError: "",
+                            isLoading: false,
+                            signupError: response.message ?? "something went wrong, please try again",
+                            isLoginSuccess: false
+                        )
+                    }
+                } else {
+                    viewState = SignupViewState(
+                        email: email,
+                        username: username,
+                        password: password,
+                        confirmationPassword: confirmationPassword,
+                        usernameError: "",
+                        passwordError: "",
+                        emailError: "",
+                        confirmationPasswordError: "",
+                        isLoading: false,
+                        signupError: response.message ?? "something went wrong, please try again",
+                        isLoginSuccess: false
+                    )
+                }
+            } catch {
+                print(error)
                 
-            } else {
-                
+                viewState = SignupViewState(
+                    email: email,
+                    username: username,
+                    password: password,
+                    confirmationPassword: confirmationPassword,
+                    usernameError: "",
+                    passwordError: "",
+                    emailError: "",
+                    confirmationPasswordError: "",
+                    isLoading: false,
+                    signupError: error.localizedDescription,
+                    isLoginSuccess: false
+                )
             }
-        } catch {
-            print(error)
-            
-            
         }
     }
 }
