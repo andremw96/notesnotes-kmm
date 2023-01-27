@@ -79,7 +79,7 @@ struct LoginScreen: View {
                         .disabled(viewModel.viewState.isLoading)
                     
                     Button("Create New Account") {
-                        
+                        path.append(signupScreenRoute)
                     }.foregroundColor(Color.white)
                 }
                 
@@ -97,6 +97,8 @@ struct LoginScreen: View {
             .navigationDestination(for: String.self) { view in
                 if view == noteListScreenRoute {
                     NoteListScreen()
+                } else if view == signupScreenRoute {
+                    SignupScreen()
                 }
             }
             .onAppear {

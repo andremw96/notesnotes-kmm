@@ -3,6 +3,7 @@ package com.andremw96.notesnotes_kmm.di.module
 import com.andremw96.notesnotes_kmm.domain.*
 import com.andremw96.notesnotes_kmm.model.repository.AddEditNoteDataValidator
 import com.andremw96.notesnotes_kmm.model.repository.LoginDataValidator
+import com.andremw96.notesnotes_kmm.model.repository.SignupDataValidator
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
@@ -24,5 +25,7 @@ class InjectionHelper : KoinComponent {
     val updateNote: UpdateNote by inject()
     val deleteNote: DeleteNote by inject()
     val addEditNoteDataValidator: AddEditNoteDataValidator by inject()
+    val signupDataValidator: SignupDataValidator by inject()
+    val signupUseCase: Signup by inject()
 
 }

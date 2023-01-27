@@ -16,6 +16,9 @@
 		7C345BA7294C3FAE00486273 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BA6294C3FAE00486273 /* LoginViewModel.swift */; };
 		7C345BA9294C4DAE00486273 /* TextFieldWithPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BA8294C4DAE00486273 /* TextFieldWithPromptView.swift */; };
 		7C345BAB294C522F00486273 /* LoginViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C345BAA294C522E00486273 /* LoginViewState.swift */; };
+		7C677E5E2983773F009F61AF /* SignupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C677E5D2983773F009F61AF /* SignupScreen.swift */; };
+		7C677E6029837B1F009F61AF /* SignupViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C677E5F29837B1F009F61AF /* SignupViewState.swift */; };
+		7C677E6229837BD6009F61AF /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C677E6129837BD6009F61AF /* SignupViewModel.swift */; };
 		7C69D4C729712B4500907BB6 /* AddEditNoteScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */; };
 		7C69D4C929713FCA00907BB6 /* AddEditNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4C829713FCA00907BB6 /* AddEditNoteViewModel.swift */; };
 		7C69D4CB29713FF500907BB6 /* AddEditNoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69D4CA29713FF400907BB6 /* AddEditNoteState.swift */; };
@@ -54,6 +57,9 @@
 		7C345BA6294C3FAE00486273 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		7C345BA8294C4DAE00486273 /* TextFieldWithPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithPromptView.swift; sourceTree = "<group>"; };
 		7C345BAA294C522E00486273 /* LoginViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewState.swift; sourceTree = "<group>"; };
+		7C677E5D2983773F009F61AF /* SignupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupScreen.swift; sourceTree = "<group>"; };
+		7C677E5F29837B1F009F61AF /* SignupViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewState.swift; sourceTree = "<group>"; };
+		7C677E6129837BD6009F61AF /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
 		7C69D4C629712B4500907BB6 /* AddEditNoteScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteScreen.swift; sourceTree = "<group>"; };
 		7C69D4C829713FCA00907BB6 /* AddEditNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteViewModel.swift; sourceTree = "<group>"; };
 		7C69D4CA29713FF400907BB6 /* AddEditNoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditNoteState.swift; sourceTree = "<group>"; };
@@ -129,6 +135,7 @@
 		7C345B9D294C1A0B00486273 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				7C677E5C29837723009F61AF /* Signup */,
 				7C69D4C529712AE000907BB6 /* AddEditNote */,
 				7C7B04642967A0A700A5F2D3 /* NoteList */,
 				7C345BA5294C30A500486273 /* Login */,
@@ -154,6 +161,16 @@
 				7C345BAA294C522E00486273 /* LoginViewState.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		7C677E5C29837723009F61AF /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+				7C677E5D2983773F009F61AF /* SignupScreen.swift */,
+				7C677E5F29837B1F009F61AF /* SignupViewState.swift */,
+				7C677E6129837BD6009F61AF /* SignupViewModel.swift */,
+			);
+			path = Signup;
 			sourceTree = "<group>";
 		};
 		7C69D4C529712AE000907BB6 /* AddEditNote */ = {
@@ -288,8 +305,11 @@
 			files = (
 				7C7B04712968100B00A5F2D3 /* NoteListItem.swift in Sources */,
 				7C345BA9294C4DAE00486273 /* TextFieldWithPromptView.swift in Sources */,
+				7C677E6029837B1F009F61AF /* SignupViewState.swift in Sources */,
+				7C677E6229837BD6009F61AF /* SignupViewModel.swift in Sources */,
 				7CB7120C29554EE100A27890 /* ViewModelProvider.swift in Sources */,
 				7C69D4C929713FCA00907BB6 /* AddEditNoteViewModel.swift in Sources */,
+				7C677E5E2983773F009F61AF /* SignupScreen.swift in Sources */,
 				7C7B04682967D2A300A5F2D3 /* Route.swift in Sources */,
 				7C345BAB294C522F00486273 /* LoginViewState.swift in Sources */,
 				7C1B52522930A5CC00DA1CEE /* ContentView.swift in Sources */,

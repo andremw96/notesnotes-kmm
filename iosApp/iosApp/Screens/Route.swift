@@ -8,6 +8,7 @@
 
 import Foundation
 
-let noteListScreenRoute = "NoteListScreen"
 let loginScreenRoute = "LoginScreen"
+let signupScreenRoute = "SignupScreen"
+let noteListScreenRoute = "NoteListScreen"
 let addEditNoteScreenRoute = "AddEditNoteScreenRoute"

@@ -45,4 +45,13 @@ class ViewModelProvider {
         return AddEditNoteViewModel(logoutUseCase: logoutUseCase, addEditNoteDataValidator: addEditNoteDataValidator, saveNewNote: saveNewNote, updateNote: updateNote)
     }
     
+    @MainActor func provideSignupViewModel() -> SignupViewModel {
+        let signupDataValidator = useCaseProvider.signupDataValidator
+        let signupUseCase = useCaseProvider.signupUseCase
+        let loginUseCase = useCaseProvider.loginUseCase
+        let saveCredential = useCaseProvider.saveCredential
+        
+        return SignupViewModel(signupDataValidator: signupDataValidator, signupUseCase: signupUseCase, loginUseCase: loginUseCase, saveCredential: saveCredential)
+    }
+    
 }
