@@ -14,16 +14,16 @@ struct AddEditNoteState {
     var titleError = ""
     var descriptionError = ""
     var isEditing = false
-    var saveNoteSuccess = false
+    var saveNoteSuccess: Bool? = nil
     var saveNoteError = ""
     var authenticationError = ""
     
     var isDataValid: Bool {
-        get { return titleError == "" && descriptionError == "" && saveNoteError == "" }
+        get { return titleError == "" && descriptionError == "" && saveNoteError == "" && noteItem.title != "" && noteItem.description != "" }
     }
     
     var isSaveError: Bool {
-        get { return saveNoteError != "" || saveNoteSuccess == false }
+        get { return saveNoteError != "" || (saveNoteSuccess != nil && saveNoteSuccess == false) }
     }
     
     var isAuthError: Bool {

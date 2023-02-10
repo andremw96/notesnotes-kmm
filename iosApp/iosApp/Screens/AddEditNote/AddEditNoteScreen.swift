@@ -21,7 +21,10 @@ struct AddEditNoteScreen: View {
     var body: some View {
         let isPresentingAlertSaveError = Binding<Bool>(
             get: { self.viewModel.viewState.isSaveError == true },
-            set: { _ in self.viewModel.viewState.saveNoteError = "" }
+            set: { _ in
+                self.viewModel.viewState.saveNoteError = ""
+                self.viewModel.viewState.saveNoteSuccess = nil
+            }
         )
         
         let isPresentingAlertAuthError = Binding<Bool>(
@@ -90,6 +93,7 @@ struct AddEditNoteScreen: View {
                     }, label: {
                         Image(systemName: "tray.and.arrow.down.fill")
                     })
+                    .disabled(!viewModel.viewState.isDataValid)
                 }
             })
         }

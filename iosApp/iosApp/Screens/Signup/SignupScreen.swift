@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SignupScreen: View {
     @StateObject private var viewModel = ViewModelProvider().provideSignupViewModel()
+    @Binding var path: NavigationPath
     
     var body: some View {
         VStack{
@@ -72,8 +73,7 @@ struct SignupScreen: View {
                                 password: viewModel.viewState.password,
                                 confirmationPassword: viewModel.viewState.confirmationPassword
                             ) {
-                                // go to note list
-                                
+                                path.append(ContentView.ViewOptions.notelist)
                             }
                         }
                     }
@@ -93,6 +93,10 @@ struct SignupScreen: View {
                         .shadow(radius: 10.0, x: 20, y: 10)
                 }.padding(.top, 50)
                     .disabled(!viewModel.viewState.isDataValid)
+                
+                Button("Already have an account? Login here") {
+                    path.removeLast(path.count)
+                }.foregroundColor(Color.white)
             }
             
             Spacer()
@@ -107,7 +111,11 @@ struct SignupScreen: View {
 }
 
 struct SignupScreen_Previews: PreviewProvider {
+    @State private static var path: NavigationPath = .init()
+    
     static var previews: some View {
-        SignupScreen()
+        NavigationStack(path: $path, root: {
+            SignupScreen(path: $path)
+        })
     }
 }
